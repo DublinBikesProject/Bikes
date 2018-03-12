@@ -1,0 +1,23 @@
+<html>
+<head>
+<title> {{ title }} </title>
+</head>
+
+<body>
+{% with %}
+
+    {% set location=(53.3498,-6.2603) %}
+    {% set style="width:500px;height:500px;"%}
+
+    {{
+    googlemap(
+        "simple-map",
+        location.0, location.1,
+        markers=[location,],
+        style=style
+        )
+    }}
+
+{% endwith %}
+</body>
+</html>
