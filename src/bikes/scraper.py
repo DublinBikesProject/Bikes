@@ -2,9 +2,7 @@ import pymysql
 import json
 import requests
 import pandas as pd
-from pandas.io.json import json_normalize
-import pandas.io.sql as pdsql
-from time import sleep, strftime, gmtime
+from time import sleep
 import sys
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
