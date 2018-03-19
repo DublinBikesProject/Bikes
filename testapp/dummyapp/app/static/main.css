@@ -1,0 +1,62 @@
+header {
+    background: linear-gradient(to right, #124250 , #004258); 
+    text-align: center; 
+    color: white; 
+    height: 5%;
+    padding: 2%;
+    position: relative;
+}
+
+#banner {
+    width: 100%;
+    
+}
+
+pageTitle {
+    color: white; 
+    text-align: center; 
+}
+
+#logo {
+    width: 10%;
+    position: absolute;
+    left: 85%;
+    top: 2%;
+}
+
+#temp {
+    text-align: center;
+    padding: 20%;
+    position: absolute;
+    left: 20%;
+
+}
+
+#bg {
+    position: relative;
+}
+
+#map {
+    padding-top: 2%;
+    position: relative;
+    left: 10%;
+    width: 100%
+    
+}
+
+body { 
+    font-family: sans-serif; 
+    background: #C6C6C8; 
+    margin: 0;
+    overflow-x: hidden;
+}
+
+footer {
+    background: #124250; 
+    text-align: center; 
+    color: white; 
+    height: 3%;
+    padding: 2%;
+    margin-top: 2%; 
+}
+

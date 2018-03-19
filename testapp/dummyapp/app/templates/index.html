@@ -1,23 +1,44 @@
 <html>
-<head>
-<title> {{ title }} </title>
-</head>
-
+    <head>
+	   <link rel="stylesheet" href="static/main.css">
+            <title> {{ title }} </title>
+    </head>
+<header>
+    <div id='pageTitle'>
+        <h1 id='title'>Dublin Bikes Information Hub</h1>
+            <img src='static/dublinbike.png' id="logo" alt='logo'>
+    </div>
+</header>
+<div id="image">
+    <img src="static/bannerimage.jpg" id='banner'>
+    <p id='temp'>There will be an image of bikes here maybe? <br>Some information about the website and Dublin Bikes<br> overall.</p> 
+</div>
+    
 <body>
-{% with %}
+  
+    
+    <div id='bg'>   
+        <div id='map'>
+            {% with %}
 
-    {% set location=(53.3498,-6.2603) %}
-    {% set style="width:500px;height:500px;"%}
+                {% set location=(53.3498,-6.2603) %}
+                {% set style="width:80%;height:500px;"%}
 
-    {{
-    googlemap(
-        "simple-map",
-        location.0, location.1,
-        markers=[location,],
-        style=style
-        )
-    }}
+                {{
+                googlemap(
+                    "simple-map",
+                    location.0, location.1,
+                    markers=[location,],
+                    style=style
+                    )
+                }}
 
-{% endwith %}
+            {% endwith %}
+        </div>
+    </div> 
 </body>
+    
+    <footer>
+        <p id='copyright'>Copyright DreamTeam201803©</p>
+    </footer>
 </html>
