@@ -1,3 +1,4 @@
+
 import requests
 import json
 import time 
@@ -26,11 +27,17 @@ def insertDb(data, db):
     
     try:
         cursor = db.cursor()
-        add_weather = ("INSERT INTO weather "
+        
+        add_weather = ("REPLACE INTO weather "
                     "(id, main, description, temp, icon) "
-                    "VALUES (%s, %s, %s, %s, %s)")
+                    "VALUES (%s, %s, %s, %s, %s)"
+                       )
+
+        
         cursor.execute(add_weather, data)
+        
         db.commit()
+        
         
     except Exception as e: 
         template = "Insert An exception of type {0} occurred. Arguments:\n{1!r}"
@@ -48,7 +55,8 @@ def main():
         if rawData.status_code == 200:
             data = json.loads(rawData.text)
             print("Working")
-            id = data['weather'][0]['id']
+            id = data['sys']['country']
+            print(id)
             main = data['weather'][0]['main']
             desc = data['weather'][0]['description']
             temp = data['main']['temp']
