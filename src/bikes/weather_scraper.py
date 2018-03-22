@@ -1,0 +1,62 @@
+import requests
+import json
+import time 
+import pymysql
+import pandas as pd
+from pymysql.err import IntegrityError
+from time import sleep, strftime, gmtime
+import pymysql.cursors
+import datetime
+import sys
+
+def dbConnect():
+    try:
+        db = pymysql.connect(
+            host='34.209.36.30',
+            user='sqlpublic',
+            passwd='sqlpublic',
+            db='publicdb'
+        )
+        
+    except Exception as e: 
+        sys.exit("Cannot connect to database")
+    return db
+    
+def insertDb(data, db):
+    
+    try:
+        cursor = db.cursor()
+        add_weather = ("INSERT INTO weather "
+                    "(id, main, description, temp, icon) "
+                    "VALUES (%s, %s, %s, %s, %s)")
+        cursor.execute(add_weather, data)
+        db.commit()
+        
+    except Exception as e: 
+        template = "Insert An exception of type {0} occurred. Arguments:\n{1!r}"
+        message = template.format(type(e).__name__, e.args)
+        print(message)
+
+def main(): 
+
+    url = "http://api.openweathermap.org/data/2.5/weather?q=dublin,ie&units=metric&appid=a87a4c45fc8819c6fd6dae5a0db2439a"
+    db = dbConnect()
+    print("Connected!")
+    while True: 
+        rawData = requests.get(url)
+        print(rawData.status_code)
+        if rawData.status_code == 200:
+            data = json.loads(rawData.text)
+            print("Working")
+            id = data['weather'][0]['id']
+            main = data['weather'][0]['main']
+            desc = data['weather'][0]['description']
+            temp = data['main']['temp']
+            icon = data['weather'][0]['icon']
+            
+            data = [id, main, desc, temp, icon]
+            insertDb(data, db)
+        time.sleep(1800)
+           
+if __name__ == "__main__":
+    main()
