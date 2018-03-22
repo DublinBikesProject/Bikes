@@ -29,8 +29,8 @@ def insertDb(data, db):
     try:
         cursor = db.cursor()
         add_bike = ("INSERT INTO bikes "
-                    "(address, available_bike_stands, available_bikes, last_update, lat, lng) "
-                    "VALUES (%(address)s, %(available_bike_stands)s, %(available_bikes)s, %(last_update)s, %(lat)s, %(lng)s)")
+                    "(address, available_bike_stands, available_bikes, last_update, lat, lng, status) "
+                    "VALUES (%(address)s, %(available_bike_stands)s, %(available_bikes)s, %(last_update)s, %(lat)s, %(lng)s, %(status)s)")
 
         cursor.execute(add_bike, data)
         db.commit()#write
