@@ -13,10 +13,10 @@ import sys
 def dbConnect():
     try:
         db = pymysql.connect(
-            host='34.209.36.30',
-            user='sqlpublic',
+            host='52.43.48.163',
+            user='publicdb',
             passwd='sqlpublic',
-            db='publicdb'
+            db='sqlpublic'
         )
         
     except Exception as e: 
