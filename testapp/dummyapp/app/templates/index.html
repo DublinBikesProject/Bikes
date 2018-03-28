@@ -1,44 +1,62 @@
+<!DOCTYPE html>
 <html>
-    <head>
-	   <link rel="stylesheet" href="static/main.css">
-            <title> {{ title }} </title>
-    </head>
-<header>
-    <div id='pageTitle'>
-        <h1 id='title'>Dublin Bikes Information Hub</h1>
-            <img src='static/dublinbike.png' id="logo" alt='logo'>
-    </div>
-</header>
-<div id="image">
-    <img src="static/bannerimage.jpg" id='banner'>
-    <p id='temp'>There will be an image of bikes here maybe? <br>Some information about the website and Dublin Bikes<br> overall.</p> 
-</div>
-    
-<body>
-  
-    
-    <div id='bg'>   
-        <div id='map'>
-            {% with %}
+  <head>
+    <meta charset="utf-8">
+    <title>Dublin Bikes</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-                {% set location=(53.3498,-6.2603) %}
-                {% set style="width:80%;height:500px;"%}
+  </head>
+  <body>
+	  <h1>{{Fdata}}</h1>
+	  <h1 id="test"></h1>
+    <div id="map"></div>
+    <script>
 
-                {{
-                googlemap(
-                    "simple-map",
-                    location.0, location.1,
-                    markers=[location,],
-                    style=style
-                    )
-                }}
+			
+		//{{Fdata}};
+		var data = JSON.parse(Fdata);
+		  document.getElementById('test').innerHTML = Fdata;      
 
-            {% endwith %}
-        </div>
-    </div> 
-</body>
-    
-    <footer>
-        <p id='copyright'>Copyright DreamTeam201803©</p>
-    </footer>
+		var please = [];
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat: 53.3498, lng: -6.2603}
+        });
+
+		  for(var i in data){
+			  //data = data[i];
+        marker = new google.maps.Marker({
+          map: map,
+          
+          animation: google.maps.Animation.DROP,
+          position: new google.maps.LatLng(i.lat,i.lng),
+			title: i.address
+        });
+			  please.push(marker);
+		  } 
+	  
+	  }
+		
+
+		
+     
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
+    </script>
+  </body>
 </html>
