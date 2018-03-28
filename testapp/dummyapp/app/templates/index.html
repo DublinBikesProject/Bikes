@@ -1,44 +1,65 @@
+<!DOCTYPE html>
 <html>
-    <head>
-	   <link rel="stylesheet" href="static/main.css">
-            <title> {{ title }} </title>
-    </head>
-<header>
-    <div id='pageTitle'>
-        <h1 id='title'>Dublin Bikes Information Hub</h1>
-            <img src='static/dublinbike.png' id="logo" alt='logo'>
-    </div>
-</header>
-<div id="image">
-    <img src="static/bannerimage.jpg" id='banner'>
-    <p id='temp'>There will be an image of bikes here maybe? <br>Some information about the website and Dublin Bikes<br> overall.</p> 
-</div>
-    
-<body>
-  
-    
-    <div id='bg'>   
-        <div id='map'>
-            {% with %}
+  <head>
+    <meta charset="utf-8">
+    <title>Marker Animations</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+		var marker;
+		var please = [];
+		var data = [
+      ['Barrow Street', 53.3417, -6.2362],
+      ['Benson Street', 53.3442, -6.23345],    ];
+		
+		
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat: 53.3498, lng: -6.2603}
+        });
 
-                {% set location=(53.3498,-6.2603) %}
-                {% set style="width:80%;height:500px;"%}
+		  for(var i = 0;i<data.length;i++){
+			  //data = data[i];
+        marker = new google.maps.Marker({
+          map: map,
+          
+          animation: google.maps.Animation.DROP,
+          position: new google.maps.LatLng(data[i][1], data[i][2]),
+			title: data[i][0]
+        });
+        marker.addListener('click', toggleBounce);
+			  please.push(marker);
+		  } 
+	  
+	  }
+		
 
-                {{
-                googlemap(
-                    "simple-map",
-                    location.0, location.1,
-                    markers=[location,],
-                    style=style
-                    )
-                }}
-
-            {% endwith %}
-        </div>
-    </div> 
-</body>
-    
-    <footer>
-        <p id='copyright'>Copyright DreamTeam201803©</p>
-    </footer>
+		
+      function toggleBounce() {
+        if (marker.getAnimation() !== null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
+    </script>
+  </body>
 </html>

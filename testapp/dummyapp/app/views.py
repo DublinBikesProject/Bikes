@@ -7,3 +7,5 @@ def index():
 	returnDict['user'] = 'COMP30670' # Feel free to put your name here!
 	returnDict['title'] = 'Home'
 	return render_template("index.html", **returnDict)
+
+

@@ -13,10 +13,10 @@ def dbconnect():
     
     try:
         db = pymysql.connect(
-            host='34.209.36.30', # database IP
-            user='sqlpublic',
+            host='52.43.48.163', # database IP
+            user='publicdb',
             passwd='sqlpublic',
-            db='publicdb'
+            db='sqlpublic'
         )
         
     except Exception as e: # error handling
@@ -29,8 +29,8 @@ def insertDb(data, db):
     try:
         cursor = db.cursor()
         add_bike = ("INSERT INTO bikes "
-                    "(address, available_bike_stands, available_bikes, last_update, lat, lng, status) "
-                    "VALUES (%(address)s, %(available_bike_stands)s, %(available_bikes)s, %(last_update)s, %(lat)s, %(lng)s, %(status)s)")
+                    "(address, available_bike_stands, available_bikes, last_update, lat, lng, status, banking) "
+                    "VALUES (%(address)s, %(available_bike_stands)s, %(available_bikes)s, %(last_update)s, %(lat)s, %(lng)s, %(status)s, %(banking)s)")
 
         cursor.execute(add_bike, data)
         db.commit()#write
@@ -50,7 +50,7 @@ def main():
         if web_data.status_code == 200:
             data = json.loads(web_data.text)
             
-            for i in range(100): # there are 100 stations with index 0-99)
+            for i in range(104): # there are 100 stations with index 0-99)
                 data[i]['lat'] = data[i]['position']['lat']
                 data[i]['lng'] = data[i]['position']['lng']
                 data[i]['last_update'] = datetime.datetime.fromtimestamp(int(data[i]['last_update']/1000)).strftime('%Y-%m-%d %H:%M:%S')
