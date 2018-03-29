@@ -84,7 +84,7 @@ mapTypeId: 'terrain'
 			
 
         }); 
-
+var markers = [];
     for (var i = 0; i < points.length; i++) {                               
 
         marker = new google.maps.Marker({                                   
@@ -94,19 +94,21 @@ mapTypeId: 'terrain'
 			title: points[i].address
 
         });     
+		markers.push(marker);
 		
-        marker.addListener('click', toggleBounce);
+        google.maps.event.addListener(marker,'click', (function (marker,i) {
+			return function() {
+        if (markers[i].getAnimation() !== null) {
+          markers[i].setAnimation(null);
+        } else {
+          markers[i].setAnimation(google.maps.Animation.BOUNCE);
+        }}
+			})(marker,i));
 
     }  
 			
 			
-			function toggleBounce() {
-        if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
-			}
+			
   } 
 			  
     </script>
