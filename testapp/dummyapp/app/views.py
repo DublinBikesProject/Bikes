@@ -35,11 +35,11 @@ def db_connect():
 def index():
     engine = db_connect()
     connect = engine.connect()
-    locs = []
-    rows = connect.execute("SELECT address,lat,lng FROM static_bikes WHERE address = 'Benson Street';")
+    points = []
+    rows = connect.execute("SELECT address,lat,lng FROM static_bikes;")
     #print("connected")
     for row in rows:
-        locs.append(dict(row))
-    jsonify(locs=locs)
-    return render_template("index.html", Fdata=locs)
+        points.append(dict(row))
+    jsonify(points=points)
+    return render_template("index.html", data=points)
 
