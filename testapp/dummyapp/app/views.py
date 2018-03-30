@@ -30,4 +30,11 @@ def index():
     for row in rows:
         points.append(dict(row))
     jsonify(points=points)
-    return render_template("index.html", data=points)
+    
+    weather = []
+    info = connect.execute("SELECT * FROM weather")
+    for i in info:
+        weather.append(dict(i))
+    jsonify(weather=weather)
+    
+    return render_template("index.html", data=points, weather=weather)

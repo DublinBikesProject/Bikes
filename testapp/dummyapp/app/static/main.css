@@ -1,3 +1,29 @@
+#map {
+    height: 100%;
+    width: 70%; 
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif; 
+    background: #C6C6C8; 
+    margin: 0;
+    overflow-x: hidden;
+}
+        
+select {
+    display:inline-block;
+    margin-top: 5%;
+    margin-left: 40%;       
+    position: relative;
+    background: #124250;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+}
+
 header {
     background: linear-gradient(to right, #124250 , #004258); 
     text-align: center; 
@@ -22,6 +48,7 @@ pageTitle {
     position: absolute;
     left: 85%;
     top: 2%;
+    z-index: 5;
 }
 
 #temp {
@@ -32,24 +59,37 @@ pageTitle {
 
 }
 
+#weather {
+    position: static;
+
+}
+
+#box {
+    position: absolute;
+    width: 20%; 
+    top: 22%;
+    left: 78%;
+    height: 20%; 
+}
+#bridge {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    opacity: 0.6;
+}
+
+#weatherTable {
+    position: absolute;
+    top: 20%;
+    height: 100%;
+    color: white;
+}
+
 #bg {
     position: relative;
 }
 
-#map {
-    padding-top: 2%;
-    position: relative;
-    left: 10%;
-    width: 100%
-    
-}
 
-body { 
-    font-family: sans-serif; 
-    background: #C6C6C8; 
-    margin: 0;
-    overflow-x: hidden;
-}
 
 footer {
     background: #124250; 

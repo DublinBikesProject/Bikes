@@ -4,34 +4,6 @@
     <meta charset="utf-8">
     <title>Dublin Bikes</title>
       <link rel="stylesheet" href="static/main.css">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-          width: 70%; 
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-        
-        
-    select {
-            
-    display:inline-block;
-    margin-top: 5%;
-    margin-left: 40%;       
-    position: relative;
-    background: #124250;
-    color: #fff;
-    outline: none;
-    cursor: pointer;
-}
-  
-    </style>
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   </head>
@@ -43,49 +15,55 @@
             <img src='static/dublinbike.png' id="logo" alt='logo'>
     </div>
     </header>
-	  
-	  <h1 id="test"></h1>
-    <div id="map"></div>
-      
-      
+    <div id="map"></div>      
 <div class="dropdown"><select class="Input">
 </select>
-      </div>
-      
-      
-      <script>
+      </div> 
+    <script>
       
       var options = JSON.parse('{{ data | tojson | safe }}');  
-        
           for (var i = 0; i < options.length; i++){
+              $('.Input').append('<option>' + options[i].address  + '</option');     
+          } 
+    </script>
+      <div id='box'>
+          <img src='static/hapennybridge.jpg' id='bridge'>
+      <div id='weather'>
+      <div id='city'><h3>Dublin, Ireland</h3>
+        </div>
+        </div>
+        </div>
+      
+      <script>
           
-          $('.Input').append('<option>' + options[i].address  + '</option');
-              
-          }
+      var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
+              var main = weatherData[0].main;
+              var desc = weatherData[0].description;
+              var temp = weatherData[0].temp;
+              //var icon = weather[i].weather[0].icon
+          
+             var weatherWidget = "<table id='weatherTable'>";
+             weatherWidget += "<tr><td>" + main + "</td><td>" + desc + "</td><td>" + temp + "</td></tr>"; 
+             document.getElementById('weather').innerHTML = weatherWidget;      
       
-     </script>
-      
+      </script>
     <script>
         
 		function initMap() {                                                      
 
-    var map = new google.maps.Map(document.getElementById('map'), {         
-      center: new google.maps.LatLng(53.3498, -6.2603),             
-      zoom: 14,
-mapTypeId: 'terrain'
-	});                                                                     
+            var map = new google.maps.Map(document.getElementById('map'), {         
+            center: new google.maps.LatLng(53.3498, -6.2603),             
+            zoom: 14,
+            mapTypeId: 'terrain'
+	   });                                                                     
 
-    var points = JSON.parse('{{ data | tojson | safe }}');                           
-    var marker;  
-	var current;
-	var infoWindow;
-	var available = points.available_bike_stands;
-			
-			
+        var points = JSON.parse('{{ data | tojson | safe }}');                        
+        var marker;  
+	    var current;
+	    var infoWindow;
+	    var available = points.available_bike_stands;
 			infoWindow = new google.maps.InfoWindow;
 			infoBikes = new google.maps.InfoWindow;
-
-
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -100,7 +78,6 @@ mapTypeId: 'terrain'
 		  icon: icon,
 				 title: 'Me'
 				  }); 
-         
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
           });
@@ -152,13 +129,8 @@ var markers = [];
           markers[i].setAnimation(google.maps.Animation.BOUNCE);
         }}
 			})(marker,i));
-
-    }  
-		
-			
-  } 
-        
-			  
+    }  			
+  }		  
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
@@ -167,4 +139,5 @@ var markers = [];
       
      
   </body>
+    <footer>Ciara-Mariyana-Mary-Kate©2018</footer>
 </html>

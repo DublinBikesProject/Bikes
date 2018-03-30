@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dublin Bikes</title>
+      <link rel="stylesheet" href="static/main.css">
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+  </head>
+    
+  <body>
+      <header>
+      <div id='pageTitle'>
+        <h1 id='title'>Dublin Bikes Information Hub</h1>
+            <img src='static/dublinbike.png' id="logo" alt='logo'>
+    </div>
+    </header>
+   <script>
+      $(document).ready(function() { 
+
+    /**
+     * Requests JSON data from OpenWeather API using given JSON-style string and
+     * sets document HTML output.
+     * @param {string} data
+     */
+    function buildJson(data) {
+        const weatherAPI = "ttp://api.openweathermap.org/data/2.5/weather?q=dublin,ie&units=metric&appid=a87a4c45fc8819c6fd6dae5a0db2439a";
+        let weatherHTML = '';
+        $.getJSON(weatherAPI, JSON.parse(data),
+            function(json) {
+                weatherHTML += "<div id='weather-icon'><img src='http://openweathermap.org/img/w/" 
+                weatherHTML += json['weather'][0].icon + ".png'></div>";
+                weatherHTML += "<div id='weather-info'>Weather in " + json['name'] + "<br>" + json['weather'][0].description + '<br />';
+                weatherHTML += json['main'].temp + " degrees</div>";
+                $('#weather-output').html(weatherHTML);
+        });
+    }
+
+
+       
+        }); 
+   
+      
+      
+    </script>
+      
+     
+  </body>
+</html>
