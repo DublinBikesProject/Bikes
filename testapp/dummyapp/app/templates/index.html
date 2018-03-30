@@ -17,10 +17,25 @@
         margin: 0;
         padding: 0;
       }
+        
+        
+    select {
+            
+    display:inline-block;
+    margin-top: 5%;
+    margin-left: 40%;       
+    position: relative;
+    background: #124250;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+}
+  
     </style>
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   </head>
+    
   <body>
       <header>
       <div id='pageTitle'>
@@ -31,8 +46,27 @@
 	  
 	  <h1 id="test"></h1>
     <div id="map"></div>
+      
+      
+<div class="dropdown"><select class="Input">
+</select>
+      </div>
+      
+      
+      <script>
+      
+      var options = JSON.parse('{{ data | tojson | safe }}');  
+        
+          for (var i = 0; i < options.length; i++){
+          
+          $('.Input').append('<option>' + options[i].address  + '</option');
+              
+          }
+      
+     </script>
+      
     <script>
-
+        
 		function initMap() {                                                      
 
     var map = new google.maps.Map(document.getElementById('map'), {         
@@ -120,14 +154,17 @@ var markers = [];
 			})(marker,i));
 
     }  
-			
-			
+		
 			
   } 
+        
 			  
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
     </script>
+    
+      
+     
   </body>
 </html>
