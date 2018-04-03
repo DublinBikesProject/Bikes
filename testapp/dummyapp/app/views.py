@@ -25,8 +25,7 @@ def index():
     engine = db_connect()
     connect = engine.connect()
     points = []
-    #rows = connect.execute("SELECT address,lat,lng FROM static_bikes;")
-    rows = connect.execute("SELECT distinct address,last_update,available_bike_stands,lat,lng,available_bikes, status, banking FROM bikes s1 WHERE last_update = (SELECT MAX(last_update) FROM bikes s2 WHERE s1.address = s2.address)GROUP BY address;")
+    rows = connect.execute("select * from bikes where last_update in (select max(last_update) from bikes group by address);")
     for row in rows:
         points.append(dict(row))
     jsonify(points=points)
