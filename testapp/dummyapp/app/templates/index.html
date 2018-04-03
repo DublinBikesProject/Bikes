@@ -108,7 +108,7 @@ var markers = [];
           position: new google.maps.LatLng(points[i].lat, points[i].lng),   
           map: map,
 		  animation: google.maps.Animation.DROP,
-			title: points[i].address
+			
 			// available_bike_stands, available_bikes
 
         });     
@@ -135,7 +135,7 @@ var markers = [];
 				
 				
 			infoBikes.open(map, this);
-		  infoBikes.setContent("Available bikes: "+points[i].available_bikes+"<br>"+"Empty stands: "+points[i].available_bike_stands);
+		  infoBikes.setContent("Station name: "+points[i].address+"<br>Available bikes: "+points[i].available_bikes+"<br>Empty stands: "+points[i].available_bike_stands);
 				
 				
 			}
