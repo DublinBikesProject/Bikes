@@ -14,10 +14,9 @@ html, body {
 }
         
 select {
-    display:inline-block;
-    margin-top: 5%;
-    margin-left: 40%;       
-    position: relative;
+    top: 30%;
+    left: 80%;       
+    position: absolute;
     background: #124250;
     color: #fff;
     outline: none;
