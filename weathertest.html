@@ -16,24 +16,7 @@
     </div>
     </header>
    <script>
-      $(document).ready(function() { 
-
-    /**
-     * Requests JSON data from OpenWeather API using given JSON-style string and
-     * sets document HTML output.
-     * @param {string} data
-     */
-    function buildJson(data) {
-        const weatherAPI = "ttp://api.openweathermap.org/data/2.5/weather?q=dublin,ie&units=metric&appid=a87a4c45fc8819c6fd6dae5a0db2439a";
-        let weatherHTML = '';
-        $.getJSON(weatherAPI, JSON.parse(data),
-            function(json) {
-                weatherHTML += "<div id='weather-icon'><img src='http://openweathermap.org/img/w/" 
-                weatherHTML += json['weather'][0].icon + ".png'></div>";
-                weatherHTML += "<div id='weather-info'>Weather in " + json['name'] + "<br>" + json['weather'][0].description + '<br />';
-                weatherHTML += json['main'].temp + " degrees</div>";
-                $('#weather-output').html(weatherHTML);
-        });
+      
     }
 
 

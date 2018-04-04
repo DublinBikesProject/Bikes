@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Dublin Bikes</title>
       <link rel="stylesheet" href="static/main.css">
+      <link href='http://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet' type='text/css'>
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   </head>
@@ -27,46 +28,41 @@
           } 
     </script>
       <div id='box'>
-          <img src='static/hapennybridge.jpg' id='bridge'>
+          <!--<img src='static/hapennybridge.jpg' id='bridge'>-->
       <div id='weather'>
-      <div id='city'><h3>Dublin, Ireland</h3>
-        </div>
         </div>
         </div>
       
       <script>
           
       var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
-              var main = weatherData[0].main;
-              var desc = weatherData[0].description;
+              //var main = weatherData[0].main;
+              //var desc = weatherData[0].description;
               var temp = weatherData[0].temp;
-              //var icon = weather[i].weather[0].icon
+              var icon = weatherData[0].icon;
           
-             var weatherWidget = "<table id='weatherTable'>";
-             weatherWidget += "<tr><td>" + main + "</td><td>" + desc + "</td><td>" + temp + "</td></tr>"; 
+             var weatherWidget = "<div id='weatherWidget'>";
+             weatherWidget += temp + "°" + "<img src=../static/"+icon+".png id='icons'/>"; 
              document.getElementById('weather').innerHTML = weatherWidget;      
       
       </script>
     <script>
         
-		function initMap() {                                                      
-
+		function initMap() {                                    
             var map = new google.maps.Map(document.getElementById('map'), {         
-            center: new google.maps.LatLng(53.3498, -6.2603),             
-            zoom: 14,
+            center: new google.maps.LatLng(53.3450, -6.2603),             
+            zoom: 13.5,
             mapTypeId: 'roadmap'
 	   });                                                                     
 
-        var points = JSON.parse('{{ data | tojson | safe }}');                        
-        var marker;  
+        var points = JSON.parse('{{ data | tojson | safe }}');   var marker;  
 	    var current;
 	    var infoWindow;
 	    var available = points.available_bike_stands;
 		infoWindow = new google.maps.InfoWindow;
 		infoBikes = new google.maps.InfoWindow;
 			
-			
-			
+	
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
