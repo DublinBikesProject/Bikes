@@ -28,9 +28,9 @@ def insertDb(data, db):
     try:
         cursor = db.cursor()
         
-        add_weather = ("REPLACE INTO weather "
-                    "(id, main, description, temp, icon) "
-                    "VALUES (%s, %s, %s, %s, %s)"
+        add_weather = ("REPLACE INTO test "
+                    "(id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, visibility, windspeed) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                        )
 
         
@@ -61,8 +61,13 @@ def main():
             desc = data['weather'][0]['description']
             temp = data['main']['temp']
             icon = data['weather'][0]['icon']
+            pressure = data['main']['pressure']
+            humidity = data['main']['humidity']
+            temp_min = data['main']['temp_min']
+            temp_max = data['main']['temp_max']
+            visibility = data['visibility']                           
             
-            data = [id, main, desc, temp, icon]
+            data = [id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, visibility]
             insertDb(data, db)
         time.sleep(1800)
            
