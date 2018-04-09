@@ -8,18 +8,19 @@
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
   </head>
-    
   <body>
       <header>
-      <div id='pageTitle'>
-        <h1 id='title'>Dublin Bikes Information Hub</h1>
-            <img src='static/dublinbike.png' id="logo" alt='logo'>
-    </div>
+        <div id='pageTitle'>
+            <h1 id='title'>Dublin Bikes Information Hub</h1>
+                <img src='static/dublinbike.png' id="logo" alt='logo'>
+        </div>
     </header>
+    
     <div id="map"></div>
-    <div id="test"></div> 
-<div class="dropdown"><select id="Input" onchange="myFunction()">
-</select>
+        <div id="test"></div> 
+      
+      <div class="dropdown">
+          <select id="Input" onchange="myFunction()"></select>
       </div> 
 	   
     <script>
@@ -27,31 +28,48 @@
       var options = JSON.parse('{{ data | tojson | safe }}');  
           for (var i = 0; i < options.length; i++){
               $('#Input').append('<option value="'+String(options[i].address)+'">'+String(options[i].address)+'</option>');
-              y.push(options[i]);
-              
-		  }
-
-function myFunction() {
-    var x = document.getElementById("Input").value;
+              y.push(options[i]);          
+		  }  
+        
+      function myFunction() {
+        var x = document.getElementById("Input").value;
     
-    for (var i = 0; i < options.length; i++){
-        if(y[i].address == x){
+        for (var i = 0; i < options.length; i++){
+            if(y[i].address == x){
             
-            if (y[i].banking == '0'){
-                 x = 'No';
-            }
+                if (y[i].banking == '0'){
+                    x = 'No';
+                }
             
-            else if (y[i].banking == '1'){
-                x = "yes";
-            }
-               
-            document.getElementById("test").innerHTML = "You selected: " + y[i].address + "<br>" + "The number of available bikes are" + " " + y[i].available_bikes + "<br> " + " The number of available bike stands are " + y[i].available_bike_stands + " <br>" +  "The stop is " + y[i].status + "<br>" + "Banking Available: " + x;
-            break;
+                else if (y[i].banking == '1'){
+                    x = "Yes";
+                }      
             
-        }
+            document.getElementById("test").addEventListener('click' , showDetails() , false)   
+        }  
     }
+  
+    function showDetails() {
+            var popup = document.createElement('div');
+                popup.className = 'popup';
+                popup.id = 'test';
+                var cancel = document.createElement('div');
+                cancel.className = 'cancel';
+                cancel.innerHTML = 'X';
+                cancel.onclick = function(e) { popup.parentNode.removeChild(popup) };
+                var message = document.createElement('span');
+                message.innerHTML = "<b>You selected: </b>" + y[i].address + "<br>" + "<b>Available Bikes:</b> " + " " + y[i].available_bikes + "<br> " + "<b>Available Bike Stands:</b> " + y[i].available_bike_stands + " <br>" +  "<b>The stop is: </b>" + y[i].status + "<br>" + "<b>Banking Available: </b>" + x + "<br>";
+                popup.appendChild(message);                                    
+                popup.appendChild(cancel);
+                document.body.appendChild(popup);
  
-}
+            }
+    
+      } 
+        
+            
+           
+        
         
         /*for (i = 0; i < cars.length; i++) { 
     text += cars[i] + "<br>";
@@ -59,43 +77,35 @@ function myFunction() {
         
     </script>
       <div id='box'>
-          
-          <!--<img src='static/hapennybridge.jpg' id='bridge'>-->
-      <div id='weather'>
-        </div>
+        <div id='weather'></div>
             <div id='clock'>test</div>
-        </div>
-    
-      
+      </div>
       <script>
           
-      var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
-              //var main = weatherData[0].main;
-              //var desc = weatherData[0].description;
-              var temp = weatherData[0].temp;
-              var icon = weatherData[0].icon;
-          
-             var weatherWidget = "<div id='weatherWidget'>";
-             weatherWidget += temp + "°" + "<img src=../static/"+icon+".png id='icons'/>"; 
-             document.getElementById('weather').innerHTML = weatherWidget;      
-      
+          var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
+                  var temp = weatherData[0].temp;
+                  var icon = weatherData[0].icon;
+
+                 var weatherWidget = "<div id='weatherWidget'>";
+                 weatherWidget += temp + "°" + "<img src=../static/"+icon+".png id='icons'/>"; 
+                 document.getElementById('weather').innerHTML = weatherWidget;      
+
       </script>
+      
       <script>
       // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
           
-      (function () {
+            function () {
+                var clockElement = document.getElementById( "clock" );
+                function updateClock ( clock ) {
+                     clock.innerHTML = new Date().toLocaleTimeString();
+                }
 
-        var clockElement = document.getElementById( "clock" );
+                setInterval(function () {
+                    updateClock( clockElement );
+                }, 1000);
 
-        function updateClock ( clock ) {
-            clock.innerHTML = new Date().toLocaleTimeString();
-        }
-
-          setInterval(function () {
-              updateClock( clockElement );
-        }, 1000);
-
-}());
+            }());
       </script>
     <script>
         
@@ -104,16 +114,15 @@ function myFunction() {
             center: new google.maps.LatLng(53.3450, -6.2603),             
             zoom: 13.5,
             mapTypeId: 'roadmap'
-	   });                                                                     
+	    });                                                                     
 
-        var points = JSON.parse('{{ data | tojson | safe }}');   var marker;  
-	    var current;
-	    var infoWindow;
-	    var available = points.available_bike_stands;
-		infoWindow = new google.maps.InfoWindow;
-		infoBikes = new google.maps.InfoWindow;
-			
-	
+            var points = JSON.parse('{{ data | tojson | safe }}');   var marker;  
+            var current;
+            var infoWindow;
+            var available = points.available_bike_stands;
+            infoWindow = new google.maps.InfoWindow;
+            infoBikes = new google.maps.InfoWindow;
+
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -143,19 +152,18 @@ function myFunction() {
       }
 			
 			var icon = {
-    url: '../static/marker.png', // url
-    scaledSize: new google.maps.Size(40, 60), // scaled size
-    
-};
+                    url: '../static/marker.png', // url
+                    scaledSize: new google.maps.Size(40, 60), // scaled size
+         
+            };
             
- var bikeicon = {
-    url: '../static/bike_marker3.png', // url
-    scaledSize: new google.maps.Size(40, 40), // scaled size
-
+        var bikeicon = {
+            url: '../static/bike_marker.png', // url
+            scaledSize: new google.maps.Size(40, 40), // scaled size            
+        }; 
             
- }; 
-var markers = [];
-    for (var i = 0; i < points.length; i++) {                               
+            var markers = [];
+                for (var i = 0; i < points.length; i++) {                               
 
         marker = new google.maps.Marker({                                   
           position: new google.maps.LatLng(points[i].lat, points[i].lng),   
