@@ -95,7 +95,7 @@
       <script>
       // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
           
-            function () {
+            (function () {
                 var clockElement = document.getElementById( "clock" );
                 function updateClock ( clock ) {
                      clock.innerHTML = new Date().toLocaleTimeString();
