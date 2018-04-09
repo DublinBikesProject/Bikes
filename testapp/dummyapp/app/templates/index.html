@@ -43,10 +43,13 @@ function myFunction() {
         
     </script>
       <div id='box'>
+          
           <!--<img src='static/hapennybridge.jpg' id='bridge'>-->
       <div id='weather'>
         </div>
+            <div id='clock'>test</div>
         </div>
+    
       
       <script>
           
@@ -60,6 +63,23 @@ function myFunction() {
              weatherWidget += temp + "°" + "<img src=../static/"+icon+".png id='icons'/>"; 
              document.getElementById('weather').innerHTML = weatherWidget;      
       
+      </script>
+      <script>
+      // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
+          
+      (function () {
+
+        var clockElement = document.getElementById( "clock" );
+
+        function updateClock ( clock ) {
+            clock.innerHTML = new Date().toLocaleTimeString();
+        }
+
+          setInterval(function () {
+              updateClock( clockElement );
+        }, 1000);
+
+}());
       </script>
     <script>
         
@@ -111,7 +131,13 @@ function myFunction() {
     scaledSize: new google.maps.Size(40, 60), // scaled size
     
 };
-			
+            
+ var bikeicon = {
+    url: '../static/bike_marker3.png', // url
+    scaledSize: new google.maps.Size(40, 40), // scaled size
+
+            
+ }; 
 var markers = [];
     for (var i = 0; i < points.length; i++) {                               
 
@@ -119,9 +145,11 @@ var markers = [];
           position: new google.maps.LatLng(points[i].lat, points[i].lng),   
           map: map,
 		  animation: google.maps.Animation.DROP,
+        icon: bikeicon
 			
 			// available_bike_stands, available_bikes
-
+            
+        
         });     
 		markers.push(marker);
 		

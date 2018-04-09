@@ -46,6 +46,7 @@ header {
 #title {
    position: absolute;
     left: 58%;
+    font-size: 2vw; 
     
 }
 
@@ -72,9 +73,14 @@ header {
 #box {
     position: absolute;
     width: 20%; 
-    top: 3%;
+    top: 0%;
     left: 3%;
     height: 10%; 
+}
+
+#clock {
+    color: white;
+    position: absolute;
 }
 #bridge {
     width: 100%;
@@ -88,7 +94,7 @@ header {
     top: 20%;
     height: 100%;
     color: white;
-    font-size: 2vw;
+    font-size: 1.5vw;
 }
 
 #weatherInfo {
