@@ -16,7 +16,7 @@ CSV_FILE = "output.csv"             # CSV file to save data in
 def StationDetails():
     print("Scraping at", strftime("%Y%m%d%H%M%S", gmtime()))
     try:
-        r = "http://api.citybik.es/dublinbikes.json"
+        r = "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=163a27dc14a77d825fb26c4212d74477642b4469"
         json_data = requests.get(r, proxies='')
         station_data = json.loads(json_data.content)
     

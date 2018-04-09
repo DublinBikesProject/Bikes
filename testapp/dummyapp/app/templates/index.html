@@ -16,16 +16,31 @@
             <img src='static/dublinbike.png' id="logo" alt='logo'>
     </div>
     </header>
-    <div id="map"></div>      
-<div class="dropdown"><select class="Input">
+    <div id="map"></div>
+    <div id="test">testing</div> 
+<div class="dropdown"><select id="Input" onchange="myFunction()">
 </select>
       </div> 
+	   
     <script>
       
       var options = JSON.parse('{{ data | tojson | safe }}');  
           for (var i = 0; i < options.length; i++){
-              $('.Input').append('<option>' + options[i].address  + '</option');     
-          } 
+              $('#Input').append('<option value="'+String(options[i].address)+'">'+String(options[i].address)+'</option>');
+              
+		  }
+
+function myFunction() {
+    var x = document.getElementById("Input").value;
+    
+    document.getElementById("test").innerHTML = "You selected: " + x;
+ 
+}
+        
+        /*for (i = 0; i < cars.length; i++) { 
+    text += cars[i] + "<br>";
+}*/
+        
     </script>
       <div id='box'>
           <!--<img src='static/hapennybridge.jpg' id='bridge'>-->
@@ -137,9 +152,6 @@ var markers = [];
 			}
 			
 		})(marker,i));
-		
-		
-		
 		
     }  			
   }		  
