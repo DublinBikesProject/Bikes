@@ -28,14 +28,11 @@ def insertDb(data, db):
     try:
         cursor = db.cursor()
         
-        add_weather = ("REPLACE INTO test "
-                    "(id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, visibility, windspeed) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                       )
-
+        add_weather = ("REPLACE INTO weather "
+                    "(id, main, description, temp, icon, pressure, humidity, temp_min, temp_max, visibility, windspeed) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
         
         cursor.execute(add_weather, data)
-        
         db.commit()
         
         
@@ -65,9 +62,10 @@ def main():
             humidity = data['main']['humidity']
             temp_min = data['main']['temp_min']
             temp_max = data['main']['temp_max']
-            visibility = data['visibility']                           
+            visibility = data['visibility']
+            windspeed = data['wind']['speed']
             
-            data = [id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, visibility]
+            data = [id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, visibility, windspeed]
             insertDb(data, db)
         time.sleep(1800)
            
