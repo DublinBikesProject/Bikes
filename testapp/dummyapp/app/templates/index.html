@@ -17,23 +17,39 @@
     </div>
     </header>
     <div id="map"></div>
-    <div id="test">testing</div> 
+    <div id="test"></div> 
 <div class="dropdown"><select id="Input" onchange="myFunction()">
 </select>
       </div> 
 	   
     <script>
-      
+      var y = [];
       var options = JSON.parse('{{ data | tojson | safe }}');  
           for (var i = 0; i < options.length; i++){
               $('#Input').append('<option value="'+String(options[i].address)+'">'+String(options[i].address)+'</option>');
+              y.push(options[i]);
               
 		  }
 
 function myFunction() {
     var x = document.getElementById("Input").value;
     
-    document.getElementById("test").innerHTML = "You selected: " + x;
+    for (var i = 0; i < options.length; i++){
+        if(y[i].address == x){
+            
+            if (y[i].banking == '0'){
+                 x = 'No';
+            }
+            
+            else if (y[i].banking == '1'){
+                x = "yes";
+            }
+               
+            document.getElementById("test").innerHTML = "You selected: " + y[i].address + "<br>" + "The number of available bikes are" + " " + y[i].available_bikes + "<br> " + " The number of available bike stands are " + y[i].available_bike_stands + " <br>" +  "The stop is " + y[i].status + "<br>" + "Banking Available: " + x;
+            break;
+            
+        }
+    }
  
 }
         
