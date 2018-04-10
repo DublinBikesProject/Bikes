@@ -20,7 +20,7 @@
         <div id="test"></div> 
       
       <div class="dropdown">
-          <select id="Input" onchange="myFunction()"></select>
+          <select id="Input" onchange="myFunction();drawVisualization()"></select>
       </div> 
 	   
     <script>
@@ -194,13 +194,21 @@
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawVisualization);
+      //google.charts.setOnLoadCallback(drawVisualization);
 
 		 
 		
 		
+			
+			
+			
+			
+			
+		
       function drawVisualization() {
         // Some raw data (not necessarily accurate)
+		  
+		  var station = document.getElementById("Input").value;
 		  
 		  var averages = JSON.parse('{{ averages | tojson | safe }}'); 
 		
@@ -224,9 +232,15 @@
 			  
 		  }
 		  
+		   for (var i = 0; i < averages.length; i++){
+            if(averages[i].address == station){
+				
+            
+          	  
+		  
         var data = google.visualization.arrayToDataTable([
          ['Day', 'Available Bikes', 'Free Stands', 'Humidity'],
-         ['Monday',  parseInt(avg_data[0].ab), parseInt(avg_data[0].ast), hist_weather[0].humidity],
+         ['Monday',  parseInt(avg_data[i].ab), parseInt(avg_data[i].ast), hist_weather[0].humidity],
          ['Tuesday',  13,      11,        60],
          ['Wednesday',  15,      16,        50],
          ['Thursday',  39,      10,        61],
@@ -236,7 +250,7 @@
 
 		  //parseInt
     var options = {
-      title : 'Station Usage by Day', 
+      title : averages[i].address, 
 		legend: {position: 'bottom'},
 		
 	  vAxis: {title: 'Avg Station Occupancy '},	
@@ -245,9 +259,17 @@
       series: {2: {type: 'line'}}
     };
 
+		  
+				
+        }  
+    }
+	
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+		  
+		  
   }
+		
     </script>
 	  
     <script async defer
