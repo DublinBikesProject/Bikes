@@ -61,15 +61,31 @@ def index():
     
     jsonify(dublin_weather=dublin_weather)
 
-    averages = []
-   
-    connect.execute("Replace into averages "
-                    "SELECT address, avg(available_bikes) as ab,avg(available_bike_stands) as ast, last_update FROM bikes s1 WHERE last_update <=  NOW() AND last_update >= NOW()-86400 AND last_update = (SELECT MAX(last_update) FROM bikes s2 WHERE s1.address = s2.address) Group by address;")
 
-    
-    avg = connect.execute("SELECT * FROM averages")
-    for i in avg:
+    averages = []
+ 
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Monday' group by address")
+    for i in bikes:
         averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Tuesday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Wednesday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Thursday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Friday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Saturday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Sunday' group by address")
+    for i in bikes:
+        averages.append(dict(i))
+    
     jsonify(averages=averages)
     
     return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather)

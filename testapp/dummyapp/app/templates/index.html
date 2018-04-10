@@ -205,16 +205,14 @@
     }  			
   }	
 		
-		
-
+			
     </script>
 	  
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       //google.charts.setOnLoadCallback(drawVisualization);
-
-
+        
       function drawVisualization() {
         // Some raw data (not necessarily accurate)
 		  
@@ -230,7 +228,6 @@
 			  
 		  }
 		  
-		  
 		   var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}'); 
 		
 		 var dublin_weather = [];
@@ -238,27 +235,30 @@
           for (var i = 0; i < hist_weather.length; i++){
               
               dublin_weather.push(hist_weather[i]);     
-			  console.log(dublin_weather)
 			  
 		  }
-		  
-		   for (var i = 0; i < averages.length; i++){
-            if(averages[i].address == station){
+		  var bikes = [];
+		  var stands = [];
+		   for (var i = 0; i < avg_data.length; i++){
+            if(avg_data[i].address == station){
 				
             
-          	  
-		  
+          	bike = avg_data[i].ab;
+			stand = avg_data[i].ast;
+			bikes.push(Math.round(bike));
+			stands.push(Math.round(stand));
+                
         var data = google.visualization.arrayToDataTable([
          ['Day', 'Available Bikes', 'Free Stands', 'Humidity'],
-         ['Monday',  parseInt(avg_data[i].ab), parseInt(avg_data[i].ast), parseInt(dublin_weather[0].h)],
-         ['Tuesday',  13,      11,        parseInt(dublin_weather[1].h)],
-         ['Wednesday',  15,      16,        parseInt(dublin_weather[2].h)],
-         ['Thursday',  39,      10,        parseInt(dublin_weather[3].h)],
-         ['Friday',  16,      61,         parseInt(dublin_weather[4].h)] ,
-		 ['Saturday',  39,      10,        parseInt(dublin_weather[5].h)],
-         ['Sunday',  16,      61,         parseInt(dublin_weather[6].h)]]);
+         ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
+         ['Tuesday',  bikes[1], stands[1],        parseInt(dublin_weather[1].h)],
+         ['Wednesday',  bikes[2], stands[2],        parseInt(dublin_weather[2].h)],
+         ['Thursday',  bikes[3], stands[3],        parseInt(dublin_weather[3].h)],
+         ['Friday',  bikes[4], stands[4],         parseInt(dublin_weather[4].h)] ,
+		 ['Saturday',  bikes[5], stands[5],        parseInt(dublin_weather[5].h)],
+         ['Sunday',  bikes[6], stands[6],         parseInt(dublin_weather[6].h)]]);
 
-		  //parseInt
+		  
     var options = {
       title : averages[i].address, 
 		legend: {position: 'bottom'},
