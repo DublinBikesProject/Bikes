@@ -37,9 +37,28 @@ def index():
     jsonify(weather=weather)
 
     dublin_weather = []
-    historical_weather = connect.execute("SELECT * FROM dublin_weather")
+    historical_weather = connect.execute("SELECT avg(humidity)as h FROM sqlpublic.dublin_weather Where DOW = 'Monday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Tuesday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Wednesday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Thursday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Friday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Saturday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Sunday'")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    
     jsonify(dublin_weather=dublin_weather)
 
     averages = []
@@ -54,4 +73,3 @@ def index():
     jsonify(averages=averages)
     
     return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather)
-

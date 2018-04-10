@@ -206,8 +206,7 @@
   }	
 		
 		
-		 
-		
+
     </script>
 	  
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -215,15 +214,7 @@
       google.charts.load('current', {'packages':['corechart']});
       //google.charts.setOnLoadCallback(drawVisualization);
 
-		 
-		
-		
-			
-			
-			
-			
-			
-		
+
       function drawVisualization() {
         // Some raw data (not necessarily accurate)
 		  
@@ -247,7 +238,7 @@
           for (var i = 0; i < hist_weather.length; i++){
               
               dublin_weather.push(hist_weather[i]);     
-			  console.log(hist_weather[i])
+			  console.log(dublin_weather)
 			  
 		  }
 		  
@@ -259,13 +250,13 @@
 		  
         var data = google.visualization.arrayToDataTable([
          ['Day', 'Available Bikes', 'Free Stands', 'Humidity'],
-         ['Monday',  parseInt(avg_data[i].ab), parseInt(avg_data[i].ast), hist_weather[0].humidity],
-         ['Tuesday',  13,      11,        60],
-         ['Wednesday',  15,      16,        50],
-         ['Thursday',  39,      10,        61],
-         ['Friday',  16,      61,         62] ,
-		 ['Saturday',  39,      10,        61],
-         ['Sunday',  16,      61,         62]]);
+         ['Monday',  parseInt(avg_data[i].ab), parseInt(avg_data[i].ast), parseInt(dublin_weather[0].h)],
+         ['Tuesday',  13,      11,        parseInt(dublin_weather[1].h)],
+         ['Wednesday',  15,      16,        parseInt(dublin_weather[2].h)],
+         ['Thursday',  39,      10,        parseInt(dublin_weather[3].h)],
+         ['Friday',  16,      61,         parseInt(dublin_weather[4].h)] ,
+		 ['Saturday',  39,      10,        parseInt(dublin_weather[5].h)],
+         ['Sunday',  16,      61,         parseInt(dublin_weather[6].h)]]);
 
 		  //parseInt
     var options = {
