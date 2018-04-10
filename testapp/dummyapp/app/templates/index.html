@@ -20,7 +20,7 @@
         <div id="test"></div> 
       
       <div class="dropdown">
-          <select id="Input" onchange="myFunction();drawVisualization()"></select>
+          <select id="Input" onchange="myFunction()"></select>
       </div> 
 	   
     <script>
@@ -112,6 +112,7 @@
             var current;
             var infoWindow;
             var available = points.available_bike_stands;
+            var available_bikes = points.available_bikes;
             infoWindow = new google.maps.InfoWindow;
             infoBikes = new google.maps.InfoWindow;
 
@@ -149,13 +150,28 @@
          
             };
             
-        var bikeicon = {
-            url: '../static/bike_marker.png', // url
-            scaledSize: new google.maps.Size(40, 40), // scaled size            
-        }; 
-            
+        
             var markers = [];
-                for (var i = 0; i < points.length; i++) {                               
+                for (var i = 0; i < points.length; i++) {  
+                
+                    var capacity = points[i].available_bikes + points[i].available_bike_stands;
+                    
+                      var image_url; 
+            //console.log(points[i].available_bikes)
+            if (points[i].available_bikes <= (capacity*0.20)) {
+                image_url = "../static/bike_marker.png";
+            }
+            else if (points[i].available_bikes <= (capacity *0.6)) {
+                image_url = '../static/bike_marker_middle.png';
+            }
+            else {
+                     image_url = '../static/bike_marker_full.png';
+                     }
+                                        
+            var bikeicon = {
+            url: image_url, // url
+            scaledSize: new google.maps.Size(40, 40), // scaled size            
+        };
 
         marker = new google.maps.Marker({                                   
           position: new google.maps.LatLng(points[i].lat, points[i].lng),   
@@ -164,7 +180,8 @@
         icon: bikeicon
 			
 			// available_bike_stands, available_bikes
-            
+           
+          
         
         });     
 		markers.push(marker);
@@ -194,21 +211,13 @@
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
-      //google.charts.setOnLoadCallback(drawVisualization);
+      google.charts.setOnLoadCallback(drawVisualization);
 
 		 
 		
 		
-			
-			
-			
-			
-			
-		
       function drawVisualization() {
         // Some raw data (not necessarily accurate)
-		  
-		  var station = document.getElementById("Input").value;
 		  
 		  var averages = JSON.parse('{{ averages | tojson | safe }}'); 
 		
@@ -228,19 +237,13 @@
           for (var i = 0; i < hist_weather.length; i++){
               
               dublin_weather.push(hist_weather[i]);     
-			  console.log(hist_weather[i])
+			  //console.log(hist_weather[i])
 			  
 		  }
 		  
-		   for (var i = 0; i < averages.length; i++){
-            if(averages[i].address == station){
-				
-            
-          	  
-		  
         var data = google.visualization.arrayToDataTable([
          ['Day', 'Available Bikes', 'Free Stands', 'Humidity'],
-         ['Monday',  parseInt(avg_data[i].ab), parseInt(avg_data[i].ast), hist_weather[0].humidity],
+         ['Monday',  parseInt(avg_data[0].ab), parseInt(avg_data[0].ast), hist_weather[0].humidity],
          ['Tuesday',  13,      11,        60],
          ['Wednesday',  15,      16,        50],
          ['Thursday',  39,      10,        61],
@@ -250,7 +253,7 @@
 
 		  //parseInt
     var options = {
-      title : averages[i].address, 
+      title : 'Station Usage by Day', 
 		legend: {position: 'bottom'},
 		
 	  vAxis: {title: 'Avg Station Occupancy '},	
@@ -259,17 +262,9 @@
       series: {2: {type: 'line'}}
     };
 
-		  
-				
-        }  
-    }
-	
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
-		  
-		  
   }
-		
     </script>
 	  
     <script async defer
