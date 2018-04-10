@@ -35,5 +35,23 @@ def index():
     for i in info:
         weather.append(dict(i))
     jsonify(weather=weather)
+
+    dublin_weather = []
+    historical_weather = connect.execute("SELECT * FROM dublin_weather")
+    for i in historical_weather:
+        dublin_weather.append(dict(i))
+    jsonify(dublin_weather=dublin_weather)
+
+    averages = []
+   
+    connect.execute("Replace into averages "
+                    "SELECT address, avg(available_bikes) as ab,avg(available_bike_stands) as ast, last_update FROM bikes s1 WHERE last_update <=  NOW() AND last_update >= NOW()-86400 AND last_update = (SELECT MAX(last_update) FROM bikes s2 WHERE s1.address = s2.address) Group by address;")
+
     
-    return render_template("index.html", data=points, weather=weather)
+    avg = connect.execute("SELECT * FROM averages")
+    for i in avg:
+        averages.append(dict(i))
+    jsonify(averages=averages)
+    
+    return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather)
+
