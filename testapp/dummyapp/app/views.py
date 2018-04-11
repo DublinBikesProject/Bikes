@@ -37,25 +37,25 @@ def index():
     jsonify(weather=weather)
 
     dublin_weather = []
-    historical_weather = connect.execute("SELECT avg(humidity)as h FROM sqlpublic.dublin_weather Where DOW = 'Monday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm)as h FROM sqlpublic.dublin_rain Where DOW = 'Monday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Tuesday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Tuesday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Wednesday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Wednesday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Thursday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Thursday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Friday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Friday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Saturday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Saturday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
-    historical_weather = connect.execute("SELECT avg(humidity) as h FROM sqlpublic.dublin_weather Where DOW = 'Sunday'")
+    historical_weather = connect.execute("SELECT avg(rain_mm) as h FROM sqlpublic.dublin_rain Where DOW = 'Sunday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
     
