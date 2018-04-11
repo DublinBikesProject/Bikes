@@ -18,6 +18,13 @@ html, body {
     margin: 0;
     overflow-x: hidden;
 }
+
+#overlay {
+    position: absolute;
+    left: 30%;
+    top: 10%;
+    width: 100%;
+}
         
 select {
     top: 17%;
