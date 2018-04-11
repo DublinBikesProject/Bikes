@@ -3,27 +3,62 @@
   <head>
     <meta charset="utf-8">
     <title>Dublin Bikes</title>
+	  
+	 
       <link rel="stylesheet" href="static/main.css">
       <link href='http://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet' type='text/css'>
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+	   <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
+    </script>
+    
   </head>
-  <body>
+  <body onload="myFunctionL()" style="margin:0;">
+	  <div id="overlay">
+     <img src="../static/bike_gif.gif" alt="Loading" /> 
+</div>
+	  <div style="display:none; width:100%; height:100%;" id="myDiv">
       <header>
         <div id='pageTitle'>
             <h1 id='title'>Dublin Bikes Information Hub</h1>
                 <img src='static/dublinbike.png' id="logo" alt='logo'>
         </div>
-    </header>
-    
+    </header>	  
+	  
     <div id="map"></div>
-        <div id="test"></div> 
+    <div id="test"></div> 
       
-      <div class="dropdown">
-          <select id="Input" onchange="myFunction();drawVisualization()"></select>
-      </div> 
-	   
+    <div class="dropdown">
+    	<select id="Input" onchange="myFunction();drawVisualization()"></select>
+    </div> 
+	<div id='box'>
+        <div id='weather'></div>
+        <div id='clock'>test</div>
+    </div>
+	<div id="chart_div" style="width: 900px; height: 500px;"></div>
+	 
+ 
+	
+  <footer>Ciara-Mariyana-Mary-Kate©2018</footer>
+		  
+	 </div>
+	   </body>
     <script>
+		
+		
+var myVar;
+
+function myFunctionL() {
+    myVar = setTimeout(showPage, 3000);
+}
+
+function showPage() {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
+}
+
+		
+		
       var y = [];
       var options = JSON.parse('{{ data | tojson | safe }}');  
           for (var i = 0; i < options.length; i++){
@@ -67,13 +102,7 @@
     
 	  }
         
-    </script>
-      <div id='box'>
-        <div id='weather'></div>
-            <div id='clock'>test</div>
-      </div>
-      <script>
-          
+              
           var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
                   var temp = weatherData[0].temp;
                   var icon = weatherData[0].icon;
@@ -98,8 +127,6 @@
                 }, 1000);
 
             }());
-      </script>
-    <script>
         
 		function initMap() {                                    
             var map = new google.maps.Map(document.getElementById('map'), {         
@@ -181,32 +208,25 @@
           map: map,
 		  animation: google.maps.Animation.DROP,
         icon: bikeicon
-			
-			// available_bike_stands, available_bikes
-            
-        
+			        
         });     
 		markers.push(marker);
 		
         google.maps.event.addListener(marker,'mouseover', (function (marker,i) {
 			return function() {
-				
-
-				
+								
 				
 			infoBikes.open(map, this);
 		  infoBikes.setContent("Station name: "+points[i].address+"<br>Available bikes: "+points[i].available_bikes+"<br>Empty stands: "+points[i].available_bike_stands);
-				
-				
+								
 			}
 			
 		})(marker,i));
 		
     }  			
   }	
-		
-			
-    </script>
+					
+   </script>
 	  
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -240,8 +260,7 @@
 		  var bikes = [];
 		  var stands = [];
 		   for (var i = 0; i < avg_data.length; i++){
-            if(avg_data[i].address == station){
-				
+            if(avg_data[i].address == station){				
             
           	bike = avg_data[i].ab;
 			stand = avg_data[i].ast;
@@ -257,8 +276,7 @@
          ['Friday',  bikes[4], stands[4],         parseInt(dublin_weather[4].h)] ,
 		 ['Saturday',  bikes[5], stands[5],        parseInt(dublin_weather[5].h)],
          ['Sunday',  bikes[6], stands[6],         parseInt(dublin_weather[6].h)]]);
-
-		  
+	  
     var options = {
       title : averages[i].address, 
 		legend: {position: 'bottom'},
@@ -268,26 +286,15 @@
       seriesType: 'bars',
       series: {2: {type: 'line'}}
     };
-
-		  
-				
+	  
         }  
     }
 	
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
-		  
-		  
+		  	  
   }
-		
     </script>
 	  
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
-    </script>
-    
-      <div id="chart_div" style="width: 900px; height: 500px;"></div>
-     
-  </body>
-    <footer>Ciara-Mariyana-Mary-Kate©2018</footer>
+   
 </html>
