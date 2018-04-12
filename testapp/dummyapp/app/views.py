@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, render_template, current_app
 from sqlalchemy import create_engine
 import pymysql
@@ -87,5 +88,65 @@ def index():
         averages.append(dict(i))
     
     jsonify(averages=averages)
+
+
+
+    averages2 = []
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 6 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 7 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 8 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 9 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 10 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 11 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 12 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 13 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 14 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 15 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 16 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 17 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 18 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 19 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where  HOUR = 20 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 21 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 22 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
+    avg =connect.execute("select distinct address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where HOUR = 23 group by address")    
+    for i in avg:
+        averages2.append(dict(i))
     
-    return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather)
+    jsonify(averages2=averages2)
+    
+    return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather,averages2=averages2)

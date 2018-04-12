@@ -24,10 +24,13 @@
 }</style>
 	 
       <link rel="stylesheet" href="static/main.css">
-      <link href='http://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet' type='text/css'>
-	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <link href='http://fonts.googleapis.com/css?family=Tangerine
+' rel='stylesheet' type='text/css'>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+"></script>
 	   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap
+">
     </script>
     
   </head>
@@ -47,14 +50,14 @@
     <div id="test"></div> 
       
     <div class="dropdown">
-    	<select id="Input" onchange="myFunction();drawVisualization()"></select>
+    	<select id="Input" onchange="myFunction();drawVisualization();drawVisualization2()"></select>
     </div> 
 	<div id='box'>
         <div id='weather'></div>
         <div id='clock'>test</div>
     </div>
 	<div id="chart_div" style="width: 900px; height: 500px;"></div>
-	 
+	 <div id="chart_div2" style="width: 1900px; height: 500px;"></div>
  
 	
   <footer>Ciara-Mariyana-Mary-Kate©2018</footer>
@@ -133,6 +136,7 @@ function showPage() {
       
       <script>
       // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
+
           
             (function () {
                 var clockElement = document.getElementById( "clock" );
@@ -246,7 +250,8 @@ function showPage() {
 					
    </script>
 	  
-	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js
+"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       //google.charts.setOnLoadCallback(drawVisualization);
@@ -262,7 +267,8 @@ function showPage() {
  
           for (var i = 0; i < averages.length; i++){
               
-              avg_data.push(averages[i]);     
+              avg_data.push(averages[i]); 
+              console.log(avg_data);
 			  
 		  }
 		  
@@ -286,7 +292,7 @@ function showPage() {
 			stands.push(Math.round(stand));
                 
         var data = google.visualization.arrayToDataTable([
-         ['Day', 'Available Bikes', 'Free Stands', 'Humidity'],
+         ['Day', 'Available Bikes', 'Free Stands', 'Rain fall in mm'],
          ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
          ['Tuesday',  bikes[1], stands[1],        parseInt(dublin_weather[1].h)],
          ['Wednesday',  bikes[2], stands[2],        parseInt(dublin_weather[2].h)],
@@ -314,6 +320,88 @@ function showPage() {
 	
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
+		  	  
+  }
+		
+		
+		
+		
+		function drawVisualization2() {
+        // Some raw data (not necessarily accurate)
+		  
+		  var station = document.getElementById("Input").value;
+		  
+		  var averages = JSON.parse('{{ averages2 | tojson | safe }}'); 
+		
+		 var avg_data = [];
+ 
+          for (var i = 0; i < averages.length; i++){
+              
+              avg_data.push(averages[i]);     
+			  
+		  }
+		  
+		   var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}'); 
+		
+		 var dublin_weather = [];
+ 
+          for (var i = 0; i < hist_weather.length; i++){
+              
+              dublin_weather.push(hist_weather[i]);     
+			  
+		  }
+		  var bikes = [];
+		  var stands = [];
+		   for (var i = 0; i < avg_data.length; i++){
+            if(avg_data[i].address == station){				
+            
+          	bike = avg_data[i].ab;
+			stand = avg_data[i].ast;
+			bikes.push(Math.round(bike));
+			stands.push(Math.round(stand));
+            console.log(bikes);
+			  
+                
+        var data2 = google.visualization.arrayToDataTable([
+         ['Time', 'Available Bikes', 'Free Stands', 'Rain Fall in mm'],
+         ['6am', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
+         ['7am',  bikes[1], stands[1],        parseInt(dublin_weather[0].h)],
+         ['8am',  bikes[2], stands[2],        parseInt(dublin_weather[0].h)],
+         ['9am',  bikes[3], stands[3],        parseInt(dublin_weather[0].h)],
+         ['10am',  bikes[4], stands[4],         parseInt(dublin_weather[0].h)] ,
+		 ['11am',  bikes[5], stands[5],        parseInt(dublin_weather[0].h)],
+         ['12pm',  bikes[6], stands[6],        parseInt(dublin_weather[0].h)],
+         ['1pm',  bikes[7], stands[7],        parseInt(dublin_weather[0].h)],
+         ['2pm',  bikes[8], stands[8],        parseInt(dublin_weather[0].h)],
+        ['3pm',  bikes[9], stands[9],        parseInt(dublin_weather[0].h)],
+        ['4pm',  bikes[10], stands[10],        parseInt(dublin_weather[0].h)],
+        ['5pm',  bikes[11], stands[11],        parseInt(dublin_weather[0].h)],
+        ['6pm',  bikes[12], stands[12],        parseInt(dublin_weather[0].h)],
+        ['7pm',  bikes[13], stands[13],        parseInt(dublin_weather[0].h)],
+        ['8pm',  bikes[14], stands[14],        parseInt(dublin_weather[0].h)],
+        ['9pm',  bikes[15], stands[15],        parseInt(dublin_weather[0].h)],
+        ['10pm',  bikes[16], stands[16],        parseInt(dublin_weather[0].h)],
+         ['11pm',  bikes[17], stands[17],         parseInt(dublin_weather[0].h)]]);
+	  
+    var options2 = {
+        width: 1550,
+        height: 1320,
+        colors: ['#124250', '#124250', "#124250", '#124250'],
+        backgroundColor: '#C6C6C8',
+      title : averages[i].address, 
+		legend: {position: 'bottom'},
+		
+	  vAxis: {title: 'Hourly Averages '},	
+      hAxis: {title: 'Day'},
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	  
+        }  
+    }
+	
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+    chart.draw(data2, options2);
 		  	  
   }
 		
