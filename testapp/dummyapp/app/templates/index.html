@@ -30,7 +30,7 @@
 "></script>
 	   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap
-">
+">   
     </script>
     
   </head>
@@ -50,7 +50,7 @@
     <div id="test"></div> 
       
     <div class="dropdown">
-    	<select id="Input" onchange="myFunction();drawVisualization();drawVisualization2()"></select>
+    	<select id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
     </div> 
 	<div id='box'>
         <div id='weather'></div>
@@ -136,8 +136,9 @@ function showPage() {
       
       <script>
       // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
-
-          
+		  var latit;
+		  var longit;
+          var pos;
             (function () {
                 var clockElement = document.getElementById( "clock" );
                 function updateClock ( clock ) {
@@ -150,7 +151,9 @@ function showPage() {
 
             }());
         
-		function initMap() {                                    
+		function initMap() {  
+			directionsService = new google.maps.DirectionsService();
+  			directionsDisplay = new google.maps.DirectionsRenderer();
             var map = new google.maps.Map(document.getElementById('map'), {         
             center: new google.maps.LatLng(53.3450, -6.2603),             
             zoom: 13.5,
@@ -163,11 +166,14 @@ function showPage() {
             var available = points.available_bike_stands;
             infoWindow = new google.maps.InfoWindow;
             infoBikes = new google.maps.InfoWindow;
+			
+			
+			console.log(points[0].lat,points[0].lng)
 
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
+             pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
@@ -236,17 +242,39 @@ function showPage() {
 		
         google.maps.event.addListener(marker,'mouseover', (function (marker,i) {
 			return function() {
-								
-				
+			
 			infoBikes.open(map, this);
 		  infoBikes.setContent("Station name: "+points[i].address+"<br>Available bikes: "+points[i].available_bikes+"<br>Empty stands: "+points[i].available_bike_stands);
 								
 			}
 			
 		})(marker,i));
-		
-    }  			
-  }	
+					
+					
+		google.maps.event.addListener(marker,'click', (function (marker,i) {
+			return function() { 
+			directionsService.route({
+
+				origin: pos,
+				//destination: new google.maps.LatLng(53.3488,-6.28164),
+				destination: new google.maps.LatLng(marker.getPosition().lat(),marker.getPosition().lng()),
+				//destination: new google.maps.LatLng(points[i].lat, points[i].lng), 
+                travelMode: 'WALKING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+			}
+		})(marker,i));
+	  			
+    }  		
+			
+  directionsDisplay.setMap(map);
+}
+
 					
    </script>
 	  
@@ -359,7 +387,7 @@ function showPage() {
 			stand = avg_data[i].ast;
 			bikes.push(Math.round(bike));
 			stands.push(Math.round(stand));
-            console.log(bikes);
+          //  console.log(bikes);
 			  
                 
         var data2 = google.visualization.arrayToDataTable([
