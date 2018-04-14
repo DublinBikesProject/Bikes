@@ -50,7 +50,7 @@
     <div id="test"></div> 
       
     <div class="dropdown">
-    	<select id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
+    	<select  id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
     </div> 
 	<div id='box'>
         <div id='weather'></div>
@@ -81,7 +81,10 @@ function showPage() {
 		
 		
       var y = [];
-      var options = JSON.parse('{{ data | tojson | safe }}');  
+      var options = JSON.parse('{{ data | tojson | safe }}'); 
+		
+		 $('#Input').append('<option selected="selected" disabled="disabled">Select a station</option>')
+		
           for (var i = 0; i < options.length; i++){
               $('#Input').append('<option value="'+String(options[i].address)+'">'+String(options[i].address)+'</option>');
               y.push(options[i]);          
@@ -101,10 +104,18 @@ function showPage() {
                     x = "Yes";
                 }      
             
-            document.getElementById("test").addEventListener('click' , showDetails() , false)   
+				loclat = y[i].lat;
+				loclng = y[i].lng;
+
+				
+            document.getElementById("test").addEventListener('click' , showDetails() , false);
+				
+				
+				
         }  
-    }
   
+			
+			
     function showDetails() {
             var popup = document.createElement('div');
                 popup.className = 'popup';
@@ -120,7 +131,7 @@ function showPage() {
                 document.body.appendChild(popup);
  
             }
-    
+		}
 	  }
         
               
@@ -168,8 +179,6 @@ function showPage() {
             infoBikes = new google.maps.InfoWindow;
 			
 			
-			console.log(points[0].lat,points[0].lng)
-
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -231,16 +240,17 @@ function showPage() {
             scaledSize: new google.maps.Size(40, 40), // scaled size            
         };
 
-        marker = new google.maps.Marker({                                   
+        marker = new google.maps.Marker({ 
           position: new google.maps.LatLng(points[i].lat, points[i].lng),   
           map: map,
 		  animation: google.maps.Animation.DROP,
-        icon: bikeicon
+        icon: bikeicon,
+			title: points[i].address
 			        
         });     
 		markers.push(marker);
 		
-        google.maps.event.addListener(marker,'mouseover', (function (marker,i) {
+        google.maps.event.addListener(marker,'click', (function (marker,i) {
 			return function() {
 			
 			infoBikes.open(map, this);
@@ -251,7 +261,7 @@ function showPage() {
 		})(marker,i));
 					
 					
-		google.maps.event.addListener(marker,'click', (function (marker,i) {
+		google.maps.event.addListener(marker,'dblclick', (function (marker,i) {
 			return function() { 
 			directionsService.route({
 
@@ -269,6 +279,26 @@ function showPage() {
             });
 			}
 		})(marker,i));
+					
+					
+					 google.maps.event.addDomListener(document.getElementById('Input'), 
+            'change', (function(marker,i) {
+						 return function() { 
+							
+							marker.setAnimation(google.maps.Animation.BOUNCE);
+    						setTimeout(function(){ marker.setAnimation(null); }, 1400); 
+						 }
+					})(marker,i));
+							 
+  
+					
+					
+		
+
+			
+					
+					
+					
 	  			
     }  		
 			
@@ -296,7 +326,7 @@ function showPage() {
           for (var i = 0; i < averages.length; i++){
               
               avg_data.push(averages[i]); 
-              console.log(avg_data);
+              //console.log(avg_data);
 			  
 		  }
 		  
