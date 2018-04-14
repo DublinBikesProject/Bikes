@@ -6,6 +6,37 @@ import simplejson as json
 from pprint import pprint
 from app import app
 
+@app.route('/daily/<name>/<day>')
+def get_hourly(name, day):
+    engine = db_connect()
+    connect = engine.connect()
+    Hourly = []
+    rows = connect.execute("SELECT AVG(available_bikes) as ab, AVG(available_bike_stands) as ast, hour FROM bikes WHERE address ='{}' AND dOW = '{}' GROUP BY hour".format(name, day))
+    for row in rows:
+        Hourly.append(dict(row))
+    return jsonify(Hourly=Hourly)
+
+@app.route('/daily/<name>')
+def get_daily(name):
+    engine = db_connect()
+    connect = engine.connect()
+    data = []
+    rows = connect.execute("SELECT DOW, address, AVG(available_bikes) as ab, AVG(available_bike_stands) as ast, hour FROM bikes WHERE address ='{}' GROUP BY DOW".format(name))
+    for row in rows:
+        data.append(dict(row))
+    return jsonify(data=data)
+
+@app.route('/weather')
+def avgWeather():
+    engine = db_connect()
+    connect = engine.connect()
+    data = []
+    rows = connect.execute("SELECT DOW, avg(rain_mm)as r FROM sqlpublic.dublin_rain GROUP BY DOW;")
+    for row in rows:
+        data.append(dict(row))
+    return jsonify(data=data)
+
+
 @app.route("/locs")
 def get_locs():
     #print("1")
