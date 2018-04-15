@@ -66,402 +66,418 @@
 	   </body>
     <script>
 		
-		
-var myVar;
+		var myVar;
 
-function myFunctionL() {
-    myVar = setTimeout(showPage, 3000);
-}
-
-function showPage() {
-  document.getElementById("overlay").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
-
-		
-		
-      var y = [];
-      var options = JSON.parse('{{ data | tojson | safe }}'); 
-		
-		 $('#Input').append('<option selected="selected" disabled="disabled">Select a station</option>')
-		
-          for (var i = 0; i < options.length; i++){
-              $('#Input').append('<option value="'+String(options[i].address)+'">'+String(options[i].address)+'</option>');
-              y.push(options[i]);          
-		  }  
-        
-      function myFunction() {
-        var x = document.getElementById("Input").value;
-    
-        for (var i = 0; i < options.length; i++){
-            if(y[i].address == x){
-            
-                if (y[i].banking == '0'){
-                    x = 'No';
-                }
-            
-                else if (y[i].banking == '1'){
-                    x = "Yes";
-                }      
-            
-				loclat = y[i].lat;
-				loclng = y[i].lng;
-
-				
-            document.getElementById("test").addEventListener('click' , showDetails() , false);
-				
-				
-				
-        }  
-  
-			
-			
-    function showDetails() {
-            var popup = document.createElement('div');
-                popup.className = 'popup';
-                popup.id = 'test';
-                var cancel = document.createElement('div');
-                cancel.className = 'cancel';
-                cancel.innerHTML = 'X';
-                cancel.onclick = function(e) { popup.parentNode.removeChild(popup) };
-                var message = document.createElement('span');
-                message.innerHTML = "<b>You selected: </b>" + y[i].address + "<br>" + "<b>Available Bikes:</b> " + " " + y[i].available_bikes + "<br> " + "<b>Available Bike Stands:</b> " + y[i].available_bike_stands + " <br>" +  "<b>The stop is: </b>" + y[i].status + "<br>" + "<b>Banking Available: </b>" + x + "<br>";
-                popup.appendChild(message);                                    
-                popup.appendChild(cancel);
-                document.body.appendChild(popup);
- 
-            }
+		function myFunctionL() {
+		    myVar = setTimeout(showPage, 3000);
 		}
-	  }
-        
-              
-          var weatherData = JSON.parse('{{ weather | tojson | safe }}'); 
-                  var temp = weatherData[0].temp;
-                  var icon = weatherData[0].icon;
 
-                 var weatherWidget = "<div id='weatherWidget'>";
-                 weatherWidget += temp + "°" + "<img src=../static/"+icon+".png id='icons'/>"; 
-                 document.getElementById('weather').innerHTML = weatherWidget;      
+		function showPage() {
+		    document.getElementById("overlay").style.display = "none";
+		    document.getElementById("myDiv").style.display = "block";
+		}
 
-      </script>
-      
-      <script>
-      // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
-		  var latit;
-		  var longit;
-          var pos;
-            (function () {
-                var clockElement = document.getElementById( "clock" );
-                function updateClock ( clock ) {
-                     clock.innerHTML = new Date().toLocaleTimeString();
-                }
+		var slat;
+		var slng;
+		var y = [];
+		var options = JSON.parse('{{ data | tojson | safe }}');
 
-                setInterval(function () {
-                    updateClock( clockElement );
-                }, 1000);
+		$('#Input').append('<option selected="selected" disabled="disabled">Select a station</option>')
 
-            }());
-        
-		function initMap() {  
-			directionsService = new google.maps.DirectionsService();
-  			directionsDisplay = new google.maps.DirectionsRenderer();
-            var map = new google.maps.Map(document.getElementById('map'), {         
-            center: new google.maps.LatLng(53.3450, -6.2603),             
-            zoom: 13.5,
-            mapTypeId: 'roadmap'
-	    });                                                                     
+		for (var i = 0; i < options.length; i++) {
+		    $('#Input').append('<option value="' + String(options[i].address) + '">' + String(options[i].address) + '</option>');
+		    y.push(options[i]);
+		}
 
-            var points = JSON.parse('{{ data | tojson | safe }}');   var marker;  
-            var current;
-            var infoWindow;
-            var available = points.available_bike_stands;
-            infoWindow = new google.maps.InfoWindow;
-            infoBikes = new google.maps.InfoWindow;
-			
-			
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-             pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-			 current = new google.maps.Marker({                                   
-          position: new google.maps.LatLng(pos),   
-          map: map,
-		  animation: google.maps.Animation.BOUNCE,
-		  icon: icon,
-				 title: 'Me'
-				  }); 
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
-			function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      }
-			
-			var icon = {
-                    url: '../static/marker.png', // url
-                    scaledSize: new google.maps.Size(40, 60), // scaled size
-         
-            };
-            
-        var bikeicon = {
-            url: '../static/bike_marker.png', // url
-            scaledSize: new google.maps.Size(40, 40), // scaled size            
-        }; 
-            
-            var markers = [];
-                for (var i = 0; i < points.length; i++) {  
-                    
-                    var capacity = points[i].available_bikes + points[i].available_bike_stands;
-                    
-                      var image_url; 
-            //console.log(points[i].available_bikes)
-            if (points[i].available_bikes <= (capacity*0.20)) {
-                image_url = "../static/bike_marker.png";
-            }
-            else if (points[i].available_bikes <= (capacity *0.6)) {
-                image_url = '../static/bike_marker_middle.png';
-            }
-            else {
-                     image_url = '../static/bike_marker_full.png';
-                     }
-                                        
-            var bikeicon = {
-            url: image_url, // url
-            scaledSize: new google.maps.Size(40, 40), // scaled size            
-        };
+		function myFunction() {
+		    var x = document.getElementById("Input").value;
 
-        marker = new google.maps.Marker({ 
-          position: new google.maps.LatLng(points[i].lat, points[i].lng),   
-          map: map,
-		  animation: google.maps.Animation.DROP,
-        icon: bikeicon,
-			title: points[i].address
-			        
-        });     
-		markers.push(marker);
-		
-        google.maps.event.addListener(marker,'click', (function (marker,i) {
-			return function() {
-			
-			infoBikes.open(map, this);
-		  infoBikes.setContent("Station name: "+points[i].address+"<br>Available bikes: "+points[i].available_bikes+"<br>Empty stands: "+points[i].available_bike_stands);
-								
-			}
-			
-		})(marker,i));
-					
-					
-		google.maps.event.addListener(marker,'dblclick', (function (marker,i) {
-			return function() { 
-			directionsService.route({
+		    for (var i = 0; i < options.length; i++) {
+		        if (y[i].address == x) {
 
-				origin: pos,
-				//destination: new google.maps.LatLng(53.3488,-6.28164),
-				destination: new google.maps.LatLng(marker.getPosition().lat(),marker.getPosition().lng()),
-				//destination: new google.maps.LatLng(points[i].lat, points[i].lng), 
-                travelMode: 'WALKING'
-            }, function(response, status) {
-                if (status === 'OK') {
-                    directionsDisplay.setDirections(response);
-                } else {
-                    window.alert('Directions request failed due to ' + status);
-                }
-            });
-			}
-		})(marker,i));
-					
-					
-					 google.maps.event.addDomListener(document.getElementById('Input'), 
-            'change', (function(marker,i) {
-						 return function() { 
-							
-							marker.setAnimation(google.maps.Animation.BOUNCE);
-    						setTimeout(function(){ marker.setAnimation(null); }, 1400); 
-						 }
-					})(marker,i));
-							 
-  
-					
-					
-		
+		            if (y[i].banking == '0') {
+		                x = 'No';
+		            } else if (y[i].banking == '1') {
+		                x = "Yes";
+		            }
 
-			
-					
-					
-					
-	  			
-    }  		
-			
-  directionsDisplay.setMap(map);
-}
+		            loclat = y[i].lat;
+		            loclng = y[i].lng;
 
-					
+		            document.getElementById("test").addEventListener('click', showDetails(), false);
+
+		        }
+
+		        function showDetails() {
+		            var popup = document.createElement('div');
+		            popup.className = 'popup';
+		            popup.id = 'test';
+		            var cancel = document.createElement('div');
+		            cancel.className = 'cancel';
+		            cancel.innerHTML = 'X';
+		            cancel.onclick = function(e) {
+		                popup.parentNode.removeChild(popup)
+		            };
+		            var message = document.createElement('span');
+		            message.innerHTML = "<b>You selected: </b>" + y[i].address + "<br>" + "<b>Available Bikes:</b> " + " " + y[i].available_bikes + "<br> " + "<b>Available Bike Stands:</b> " + y[i].available_bike_stands + " <br>" + "<b>The stop is: </b>" + y[i].status + "<br>" + "<b>Banking Available: </b>" + x + "<br>";
+		            popup.appendChild(message);
+		            popup.appendChild(cancel);
+		            document.body.appendChild(popup);
+
+		        }
+		    }
+		}
+
+		var weatherData = JSON.parse('{{ weather | tojson | safe }}');
+		var temp = weatherData[0].temp;
+		var icon = weatherData[0].icon;
+
+		var weatherWidget = "<div id='weatherWidget'>";
+		weatherWidget += temp + "°" + "<img src=../static/" + icon + ".png id='icons'/>";
+		document.getElementById('weather').innerHTML = weatherWidget;
+
+		    // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
+
+		    var pos;
+		(function() {
+		    var clockElement = document.getElementById("clock");
+
+		    function updateClock(clock) {
+		        clock.innerHTML = new Date().toLocaleTimeString();
+		    }
+
+		    setInterval(function() {
+		        updateClock(clockElement);
+		    }, 1000);
+
+		}());
+
+		function initMap() {
+		    directionsService = new google.maps.DirectionsService();
+		    directionsDisplay = new google.maps.DirectionsRenderer();
+		    var map = new google.maps.Map(document.getElementById('map'), {
+		        center: new google.maps.LatLng(53.3450, -6.2603),
+		        zoom: 13.5,
+		        mapTypeId: 'roadmap'
+		    });
+
+		    var points = JSON.parse('{{ data | tojson | safe }}');
+		    var marker;
+		    var current;
+		    var infoWindow;
+		    var available = points.available_bike_stands;
+		    infoWindow = new google.maps.InfoWindow;
+		    infoBikes = new google.maps.InfoWindow;
+
+
+		    // Try HTML5 geolocation.
+		    if (navigator.geolocation) {
+		        navigator.geolocation.getCurrentPosition(function(position) {
+		            pos = {
+		                lat: position.coords.latitude,
+		                lng: position.coords.longitude
+		            };
+		            current = new google.maps.Marker({
+		                position: new google.maps.LatLng(pos),
+		                map: map,
+		                animation: google.maps.Animation.BOUNCE,
+		                icon: icon,
+		                title: 'Me'
+		            });
+		        }, function() {
+		            handleLocationError(true, infoWindow, map.getCenter());
+		        });
+		    } else {
+		        handleLocationError(false, infoWindow, map.getCenter());
+		    }
+
+		    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		        infoWindow.setPosition(pos);
+		        infoWindow.setContent(browserHasGeolocation ?
+		            'Error: The Geolocation service failed.' :
+		            'Error: Your browser doesn\'t support geolocation.');
+		        infoWindow.open(map);
+		    }
+
+		    var icon = {
+		        url: '../static/marker.png', // url
+		        scaledSize: new google.maps.Size(40, 60), // scaled size
+
+		    };
+
+		    var bikeicon = {
+		        url: '../static/bike_marker.png', // url
+		        scaledSize: new google.maps.Size(40, 40), // scaled size            
+		    };
+
+		    var markers = [];
+		    for (var i = 0; i < points.length; i++) {
+
+		        var capacity = points[i].available_bikes + points[i].available_bike_stands;
+
+		        var image_url;
+		        //console.log(points[i].available_bikes)
+		        if (points[i].available_bikes <= (capacity * 0.20)) {
+		            image_url = "../static/bike_marker.png";
+		        } else if (points[i].available_bikes <= (capacity * 0.6)) {
+		            image_url = '../static/bike_marker_middle.png';
+		        } else {
+		            image_url = '../static/bike_marker_full.png';
+		        }
+
+		        var bikeicon = {
+		            url: image_url, // url
+		            scaledSize: new google.maps.Size(40, 40), // scaled size            
+		        };
+
+		        marker = new google.maps.Marker({
+		            position: new google.maps.LatLng(points[i].lat, points[i].lng),
+		            map: map,
+		            animation: google.maps.Animation.DROP,
+		            icon: bikeicon,
+		            title: points[i].address
+
+		        });
+		        markers.push(marker);
+
+		        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+		            return function() {
+
+		                infoBikes.open(map, this);
+		                infoBikes.setContent("Station name: " + points[i].address + "<br>Available bikes: " + points[i].available_bikes + "<br>Empty stands: " + points[i].available_bike_stands);
+
+		            }
+
+		        })(marker, i));
+
+		        google.maps.event.addListener(marker, 'dblclick', (function(marker, i) {
+		            return function() {
+		                directionsService.route({
+
+		                    origin: pos,
+		                    //destination: new google.maps.LatLng(53.3488,-6.28164),
+		                    destination: new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng()),
+		                    //destination: new google.maps.LatLng(points[i].lat, points[i].lng), 
+		                    travelMode: 'WALKING'
+		                }, function(response, status) {
+		                    if (status === 'OK') {
+		                        directionsDisplay.setDirections(response);
+		                    } else {
+		                        window.alert('Directions request failed due to ' + status);
+		                    }
+		                });
+		            }
+		        })(marker, i));
+
+		        google.maps.event.addDomListener(document.getElementById('Input'), 'change', (function(marker, i) {
+		            return function() {
+
+		                var newX = document.getElementById("Input").value;
+
+		                for (var k = 0; k < points.length; k++) {
+		                    if (y[k].address == newX) {
+		                        slat = y[k].lat;
+		                        slng = y[k].lng;
+		                    }
+		                }
+		                console.log(marker.position.lat() + " " + marker.position.lng());
+
+		                for (var i = 0; i < markers.length; i++) {
+		                    var a = marker.position.lng();
+		                    var b = slng;
+		                    var diff = Math.abs(a - b);
+
+		                    if (marker.position.lat() == slat && diff < 0.00001) {
+		                        marker.setAnimation(google.maps.Animation.BOUNCE);
+		                        setTimeout(function() {
+		                            marker.setAnimation(null);
+		                        }, 1400);
+		                    }
+		                }
+		            }
+		        })(marker, i));
+		    }
+
+		    directionsDisplay.setMap(map);
+		}
+	
    </script>
 	  
 	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js
 "></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      //google.charts.setOnLoadCallback(drawVisualization);
-        
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-		  
-		  var station = document.getElementById("Input").value;
-		  
-		  var averages = JSON.parse('{{ averages | tojson | safe }}'); 
-		
-		 var avg_data = [];
- 
-          for (var i = 0; i < averages.length; i++){
-              
-              avg_data.push(averages[i]); 
-              //console.log(avg_data);
-			  
-		  }
-		  
-		   var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}'); 
-		
-		 var dublin_weather = [];
- 
-          for (var i = 0; i < hist_weather.length; i++){
-              
-              dublin_weather.push(hist_weather[i]);     
-			  
-		  }
-		  var bikes = [];
-		  var stands = [];
-		   for (var i = 0; i < avg_data.length; i++){
-            if(avg_data[i].address == station){				
-            
-          	bike = avg_data[i].ab;
-			stand = avg_data[i].ast;
-			bikes.push(Math.round(bike));
-			stands.push(Math.round(stand));
-                
-        var data = google.visualization.arrayToDataTable([
-         ['Day', 'Available Bikes', 'Free Stands', 'Rain fall in mm'],
-         ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
-         ['Tuesday',  bikes[1], stands[1],        parseInt(dublin_weather[1].h)],
-         ['Wednesday',  bikes[2], stands[2],        parseInt(dublin_weather[2].h)],
-         ['Thursday',  bikes[3], stands[3],        parseInt(dublin_weather[3].h)],
-         ['Friday',  bikes[4], stands[4],         parseInt(dublin_weather[4].h)] ,
-		 ['Saturday',  bikes[5], stands[5],        parseInt(dublin_weather[5].h)],
-         ['Sunday',  bikes[6], stands[6],         parseInt(dublin_weather[6].h)]]);
-	  
-    var options = {
-        width: 550,
-        height: 320,
-        colors: ['#124250', '#124250', "#124250", '#124250'],
-        backgroundColor: '#C6C6C8',
-      title : averages[i].address, 
-		legend: {position: 'bottom'},
-		
-	  vAxis: {title: 'Avg Station Occupancy '},	
-      hAxis: {title: 'Day'},
-      seriesType: 'bars',
-      series: {2: {type: 'line'}}
-    };
-	  
-        }  
+      google.charts.load('current', {
+    'packages': ['corechart']
+});
+//google.charts.setOnLoadCallback(drawVisualization);
+
+function drawVisualization() {
+    // Some raw data (not necessarily accurate)
+
+    var station = document.getElementById("Input").value;
+
+    var averages = JSON.parse('{{ averages | tojson | safe }}');
+
+    var avg_data = [];
+
+    for (var i = 0; i < averages.length; i++) {
+
+        avg_data.push(averages[i]);
+        //console.log(avg_data);
+
     }
-	
+
+    var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}');
+
+    var dublin_weather = [];
+
+    for (var i = 0; i < hist_weather.length; i++) {
+
+        dublin_weather.push(hist_weather[i]);
+
+    }
+    var bikes = [];
+    var stands = [];
+    for (var i = 0; i < avg_data.length; i++) {
+        if (avg_data[i].address == station) {
+
+            bike = avg_data[i].ab;
+            stand = avg_data[i].ast;
+            bikes.push(Math.round(bike));
+            stands.push(Math.round(stand));
+
+            var data = google.visualization.arrayToDataTable([
+                ['Day', 'Available Bikes', 'Free Stands', 'Rain fall in mm'],
+                ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
+                ['Tuesday', bikes[1], stands[1], parseInt(dublin_weather[1].h)],
+                ['Wednesday', bikes[2], stands[2], parseInt(dublin_weather[2].h)],
+                ['Thursday', bikes[3], stands[3], parseInt(dublin_weather[3].h)],
+                ['Friday', bikes[4], stands[4], parseInt(dublin_weather[4].h)],
+                ['Saturday', bikes[5], stands[5], parseInt(dublin_weather[5].h)],
+                ['Sunday', bikes[6], stands[6], parseInt(dublin_weather[6].h)]
+            ]);
+
+            var options = {
+                width: 550,
+                height: 320,
+                colors: ['#124250', '#124250', "#124250", '#124250'],
+                backgroundColor: '#C6C6C8',
+                title: averages[i].address,
+                legend: {
+                    position: 'bottom'
+                },
+
+                vAxis: {
+                    title: 'Avg Station Occupancy '
+                },
+                hAxis: {
+                    title: 'Day'
+                },
+                seriesType: 'bars',
+                series: {
+                    2: {
+                        type: 'line'
+                    }
+                }
+            };
+
+        }
+    }
+
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
-		  	  
-  }
-		
-		
-		
-		
-		function drawVisualization2() {
-        // Some raw data (not necessarily accurate)
-		  
-		  var station = document.getElementById("Input").value;
-		  
-		  var averages = JSON.parse('{{ averages2 | tojson | safe }}'); 
-		
-		 var avg_data = [];
- 
-          for (var i = 0; i < averages.length; i++){
-              
-              avg_data.push(averages[i]);     
-			  
-		  }
-		  
-		   var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}'); 
-		
-		 var dublin_weather = [];
- 
-          for (var i = 0; i < hist_weather.length; i++){
-              
-              dublin_weather.push(hist_weather[i]);     
-			  
-		  }
-		  var bikes = [];
-		  var stands = [];
-		   for (var i = 0; i < avg_data.length; i++){
-            if(avg_data[i].address == station){				
-            
-          	bike = avg_data[i].ab;
-			stand = avg_data[i].ast;
-			bikes.push(Math.round(bike));
-			stands.push(Math.round(stand));
-          //  console.log(bikes);
-			  
-                
-        var data2 = google.visualization.arrayToDataTable([
-         ['Time', 'Available Bikes', 'Free Stands', 'Rain Fall in mm'],
-         ['6am', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
-         ['7am',  bikes[1], stands[1],        parseInt(dublin_weather[0].h)],
-         ['8am',  bikes[2], stands[2],        parseInt(dublin_weather[0].h)],
-         ['9am',  bikes[3], stands[3],        parseInt(dublin_weather[0].h)],
-         ['10am',  bikes[4], stands[4],         parseInt(dublin_weather[0].h)] ,
-		 ['11am',  bikes[5], stands[5],        parseInt(dublin_weather[0].h)],
-         ['12pm',  bikes[6], stands[6],        parseInt(dublin_weather[0].h)],
-         ['1pm',  bikes[7], stands[7],        parseInt(dublin_weather[0].h)],
-         ['2pm',  bikes[8], stands[8],        parseInt(dublin_weather[0].h)],
-        ['3pm',  bikes[9], stands[9],        parseInt(dublin_weather[0].h)],
-        ['4pm',  bikes[10], stands[10],        parseInt(dublin_weather[0].h)],
-        ['5pm',  bikes[11], stands[11],        parseInt(dublin_weather[0].h)],
-        ['6pm',  bikes[12], stands[12],        parseInt(dublin_weather[0].h)],
-        ['7pm',  bikes[13], stands[13],        parseInt(dublin_weather[0].h)],
-        ['8pm',  bikes[14], stands[14],        parseInt(dublin_weather[0].h)],
-        ['9pm',  bikes[15], stands[15],        parseInt(dublin_weather[0].h)],
-        ['10pm',  bikes[16], stands[16],        parseInt(dublin_weather[0].h)],
-         ['11pm',  bikes[17], stands[17],         parseInt(dublin_weather[0].h)]]);
-	  
-    var options2 = {
-        width: 1550,
-        height: 1320,
-        colors: ['#124250', '#124250', "#124250", '#124250'],
-        backgroundColor: '#C6C6C8',
-      title : averages[i].address, 
-		legend: {position: 'bottom'},
-		
-	  vAxis: {title: 'Hourly Averages '},	
-      hAxis: {title: 'Day'},
-      seriesType: 'bars',
-      series: {2: {type: 'line'}}
-    };
-	  
-        }  
+
+}
+
+function drawVisualization2() {
+    // Some raw data (not necessarily accurate)
+
+    var station = document.getElementById("Input").value;
+
+    var averages = JSON.parse('{{ averages2 | tojson | safe }}');
+
+    var avg_data = [];
+
+    for (var i = 0; i < averages.length; i++) {
+
+        avg_data.push(averages[i]);
+
     }
-	
+
+    var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}');
+
+    var dublin_weather = [];
+
+    for (var i = 0; i < hist_weather.length; i++) {
+
+        dublin_weather.push(hist_weather[i]);
+
+    }
+    var bikes = [];
+    var stands = [];
+    for (var i = 0; i < avg_data.length; i++) {
+        if (avg_data[i].address == station) {
+
+            bike = avg_data[i].ab;
+            stand = avg_data[i].ast;
+            bikes.push(Math.round(bike));
+            stands.push(Math.round(stand));
+            //  console.log(bikes);
+
+
+            var data2 = google.visualization.arrayToDataTable([
+                ['Time', 'Available Bikes', 'Free Stands', 'Rain Fall in mm'],
+                ['6am', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
+                ['7am', bikes[1], stands[1], parseInt(dublin_weather[0].h)],
+                ['8am', bikes[2], stands[2], parseInt(dublin_weather[0].h)],
+                ['9am', bikes[3], stands[3], parseInt(dublin_weather[0].h)],
+                ['10am', bikes[4], stands[4], parseInt(dublin_weather[0].h)],
+                ['11am', bikes[5], stands[5], parseInt(dublin_weather[0].h)],
+                ['12pm', bikes[6], stands[6], parseInt(dublin_weather[0].h)],
+                ['1pm', bikes[7], stands[7], parseInt(dublin_weather[0].h)],
+                ['2pm', bikes[8], stands[8], parseInt(dublin_weather[0].h)],
+                ['3pm', bikes[9], stands[9], parseInt(dublin_weather[0].h)],
+                ['4pm', bikes[10], stands[10], parseInt(dublin_weather[0].h)],
+                ['5pm', bikes[11], stands[11], parseInt(dublin_weather[0].h)],
+                ['6pm', bikes[12], stands[12], parseInt(dublin_weather[0].h)],
+                ['7pm', bikes[13], stands[13], parseInt(dublin_weather[0].h)],
+                ['8pm', bikes[14], stands[14], parseInt(dublin_weather[0].h)],
+                ['9pm', bikes[15], stands[15], parseInt(dublin_weather[0].h)],
+                ['10pm', bikes[16], stands[16], parseInt(dublin_weather[0].h)],
+                ['11pm', bikes[17], stands[17], parseInt(dublin_weather[0].h)]
+            ]);
+
+            var options2 = {
+                width: 1550,
+                height: 1320,
+                colors: ['#124250', '#124250', "#124250", '#124250'],
+                backgroundColor: '#C6C6C8',
+                title: averages[i].address,
+                legend: {
+                    position: 'bottom'
+                },
+
+                vAxis: {
+                    title: 'Hourly Averages '
+                },
+                hAxis: {
+                    title: 'Day'
+                },
+                seriesType: 'bars',
+                series: {
+                    2: {
+                        type: 'line'
+                    }
+                }
+            };
+
+        }
+    }
+
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
     chart.draw(data2, options2);
-		  	  
-  }
+
+}
 		
 		
     </script>
