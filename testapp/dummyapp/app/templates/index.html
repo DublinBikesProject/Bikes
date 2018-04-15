@@ -24,14 +24,10 @@
 }</style>
 	 
       <link rel="stylesheet" href="static/main.css">
-      <link href='http://fonts.googleapis.com/css?family=Tangerine
-' rel='stylesheet' type='text/css'>
-	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-"></script>
-	   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap
-">   
-    </script>
+      <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap"></script>
     
   </head>
   <body onload="myFunctionL()" style="margin:0;">
@@ -47,20 +43,21 @@
     </header>	  
 	  
     <div id="map"></div>
-    <div id="test"></div> 
-      
-    <div class="dropdown">
-    	<select  id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
-    </div> 
-	<div id='box'>
-        <div id='weather'></div>
-        <div id='clock'>test</div>
+        <div id="test"></div> 
+
+        <div id="navbar">
+        <div class="dropdown">
+            <select  id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
+        </div> 
+        <div id='box'>
+            <div id=weatherButton> 
+                <div id='weather'></div>
+                <div id='clock'></div>
+            </div>
+        </div>
     </div>
-	<div id="chart_div" style="width: 900px; height: 500px;"></div>
-	 <div id="chart_div2" style="width: 1900px; height: 500px;"></div>
- 
-	
-  <footer>Ciara-Mariyana-Mary-Kate©2018</footer>
+	<div id="chart_div"></div>
+	 <div id="chart_div2"></div>
 		  
 	 </div>
 	   </body>
@@ -157,7 +154,7 @@
 		    directionsDisplay = new google.maps.DirectionsRenderer();
 		    var map = new google.maps.Map(document.getElementById('map'), {
 		        center: new google.maps.LatLng(53.3450, -6.2603),
-		        zoom: 13.5,
+		        zoom: 13.2,
 		        mapTypeId: 'roadmap'
 		    });
 
@@ -201,7 +198,7 @@
 
 		    var icon = {
 		        url: '../static/marker.png', // url
-		        scaledSize: new google.maps.Size(40, 60), // scaled size
+		        scaledSize: new google.maps.Size(40, 40), // scaled size
 
 		    };
 
@@ -218,11 +215,11 @@
 		        var image_url;
 		        //console.log(points[i].available_bikes)
 		        if (points[i].available_bikes <= (capacity * 0.20)) {
-		            image_url = "../static/bike_marker.png";
+		            image_url = "../static/bike_marker_full.png";
 		        } else if (points[i].available_bikes <= (capacity * 0.6)) {
 		            image_url = '../static/bike_marker_middle.png';
 		        } else {
-		            image_url = '../static/bike_marker_full.png';
+		            image_url = '../static/bike_marker_free.png';
 		        }
 
 		        var bikeicon = {
@@ -360,9 +357,8 @@ function drawVisualization() {
             var options = {
                 width: 550,
                 height: 320,
-                colors: ['#124250', '#124250', "#124250", '#124250'],
-                backgroundColor: '#C6C6C8',
-                title: averages[i].address,
+                colors: ['#008080', '#707ac2', "#7ac270"],
+                backgroundColor: '#e6e6e6',
                 legend: {
                     position: 'bottom'
                 },
@@ -448,10 +444,10 @@ function drawVisualization2() {
             ]);
 
             var options2 = {
-                width: 1550,
-                height: 1320,
-                colors: ['#124250', '#124250', "#124250", '#124250'],
-                backgroundColor: '#C6C6C8',
+                width: 720,
+                height: 345,
+                colors: ['#008080', '#707ac2', "#7ac270"],
+                backgroundColor: '#e6e6e6',
                 title: averages[i].address,
                 legend: {
                     position: 'bottom'
