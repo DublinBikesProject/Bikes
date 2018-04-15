@@ -21,27 +21,42 @@
 @keyframes animatebottom { 
   from{ bottom:-100px; opacity:0 } 
   to{ bottom:0; opacity:1 }
-}</style>
+}
+      </style>
 	 
       <link rel="stylesheet" href="static/main.css">
       <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap"></script>
-    
   </head>
   <body onload="myFunctionL()" style="margin:0;">
 	  <div id="overlay">
      <img src="../static/bike_gif.gif" alt="Loading" /> 
 </div>
 	  <div style="display:none; width:100%; height:100%;" id="myDiv" class="animate-bottom">
+          <img src="../static/dublinbike.png" id="logo">
+             <div id="sidebar" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                 
+                 
+  <a href="https://www.facebook.com/dublinbikes/"><img src=../static/facebook.png class="links"></a>
+  <a href="https://twitter.com/hashtag/dublinbikes?lang=en"><img src="../static/twitter.png" class="links"></a>
+  <a href="http://www.dublinbikes.ie/"><img src="../static/home.png" class='links'></a>
+                 
+                 
+</div>
+          
+          <span style="font-size:30px;cursor:pointer" onclick="openNav()"><img src="../static/burger_menu.png" id="burger"></span>
+
       <header>
         <div id='pageTitle'>
             <h1 id='title'>Dublin Bikes Information Hub</h1>
-                <img src='static/dublinbike.png' id="logo" alt='logo'>
+                
         </div>
-    </header>	  
-	  
+    </header>
+          
+       
     <div id="map"></div>
         <div id="test"></div> 
 
@@ -50,17 +65,20 @@
             <select  id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
         </div> 
         <div id='box'>
-            <div id=weatherButton> 
+            <!--<div id=weatherButton> 
                 <div id='weather'></div>
                 <div id='clock'></div>
-            </div>
+            </div>-->
         </div>
     </div>
+    <div id='textBox'>Welcome to Dublin Bikes<br>Information Hub</div>
 	<div id="chart_div"></div>
 	 <div id="chart_div2"></div>
-		  
 	 </div>
+      <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
+      
 	   </body>
+   
     <script>
 		
 		var myVar;
@@ -73,6 +91,15 @@
 		    document.getElementById("overlay").style.display = "none";
 		    document.getElementById("myDiv").style.display = "block";
 		}
+        
+        /* Set the width of the side navigation to 250px */
+function openNav() {
+    document.getElementById("sidebar").style.width = "80px";
+}
+
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+}
 
 		var slat;
 		var slng;
@@ -154,7 +181,7 @@
 		    directionsDisplay = new google.maps.DirectionsRenderer();
 		    var map = new google.maps.Map(document.getElementById('map'), {
 		        center: new google.maps.LatLng(53.3450, -6.2603),
-		        zoom: 13.2,
+		        zoom: 13.1,
 		        mapTypeId: 'roadmap'
 		    });
 
@@ -198,7 +225,7 @@
 
 		    var icon = {
 		        url: '../static/marker.png', // url
-		        scaledSize: new google.maps.Size(40, 40), // scaled size
+		        scaledSize: new google.maps.Size(60, 40), // scaled size
 
 		    };
 
@@ -359,6 +386,7 @@ function drawVisualization() {
                 height: 320,
                 colors: ['#008080', '#707ac2', "#7ac270"],
                 backgroundColor: '#e6e6e6',
+                title: averages[i].address,
                 legend: {
                     position: 'bottom'
                 },
