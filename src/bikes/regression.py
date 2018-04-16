@@ -1,5 +1,6 @@
 # Import required packages
 import numpy as np
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.cross_validation import train_test_split
@@ -45,4 +46,4 @@ def prediction(a,b):
 #prediction(18,20)
 
 if __name__ == "__main__":
-    prediction(a,b)
+    prediction(18,20)
