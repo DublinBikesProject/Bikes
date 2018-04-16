@@ -92,7 +92,7 @@ def index():
     
     jsonify(dublin_weather=dublin_weather)
 
-
+    '''
     averages = []
  
     bikes = connect.execute("Select  address, avg(available_bikes) as ab, avg(available_bike_stands) as ast from bikes where DOW = 'Monday' group by address")
@@ -177,6 +177,6 @@ def index():
     for i in avg:
         averages2.append(dict(i))
     
-    jsonify(averages2=averages2)
+    jsonify(averages2=averages2)'''
     
-    return render_template("index.html", data=points, weather=weather, averages=averages,dublin_weather=dublin_weather,averages2=averages2)
+    return render_template("index.html", data=points, weather=weather,dublin_weather=dublin_weather)
