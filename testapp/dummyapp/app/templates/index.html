@@ -58,20 +58,24 @@
           
        
     <div id="map"></div>
-            <div> <!-- Buttons to toggle what day information is displayed for -->
-                <input type="button" value="Monday" onclick="drawVisualisation2('Monday');">
-                <input type="button" value="Tuesday" onclick="drawVisualisation2('Tuesday');">
-                <input type="button" value="Wednesday" onclick="drawVisualisation2('Wednesday');">
-                <input type="button" value="Thursday" onclick="drawVisualisation2('Thursday');">
-                <input type="button" value="Friday" onclick="drawVisualisation2('Friday');">
-                <input type="button" value="Saturday" onclick="drawVisualisation2('Saturday');">
-                <input type="button" value="Sunday" onclick="drawVisualisation2('Sunday');">
+            <div id = dayDB> 
+                
+                <select id='day' onchange="drawVisualisation2()">
+                    <option>Select Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday" >Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option  value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
             </div>
           
         <div id="test"></div> 
 
         <div id="navbar">
-        <div class="dropdown">
+        <div id="dropdown">
             <select  id="Input" onchange="myFunction();drawVisualization();"></select>
         </div> 
         <div id='box'>
@@ -88,6 +92,8 @@
       <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
       
 	   </body>
+    
+    <script></script>
    
     <script>
 		
@@ -412,7 +418,7 @@ function drawVisualisation2(x) {
        //The path is populated by the select which is the station
     //This generates the flask query and creates the URL that holds the data
    
-    var path = '/daily/'+document.getElementById("Input").value+'/'+x;
+    var path = '/daily/'+document.getElementById("Input").value+'/'+document.getElementById("day").value;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -457,7 +463,7 @@ function drawVisualisation2(x) {
                 colors: ['#008080', '#707ac2', "#7ac270", "#7ac270"],
                 backgroundColor: '#e6e6e6',
                 chartArea: {'width': '73%'},
-      title : x, 
+      title : document.getElementById("day").value, 
         legend: {position: 'in'},
 	  vAxis: {title: 'Hourly Station Data '},	
       hAxis: {title: 'Time'},

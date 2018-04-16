@@ -72,16 +72,30 @@ header {
     font-size: 1.5vw;
     margin-right: 
 }
-        
-select {
+
+#dayDB {
+    top: 44%;
+    left: 20%;       
+    position: absolute;
+}
+
+#dropdown {
     top: 44%;
     left: 4%;       
     position: absolute;
+    
+}
+
+
+select {
+    
     background: #124250;
     color: #fff;
     outline: none;
     cursor: pointer;
 }
+
+  
 
 #banner {
     width: 100%;
