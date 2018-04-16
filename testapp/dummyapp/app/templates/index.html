@@ -92,9 +92,7 @@
       <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
       
 	   </body>
-    
-    <script></script>
-   
+       
     <script>
 		
 		var myVar;
@@ -366,15 +364,8 @@ function closeNav() {
 function drawVisualization() {
     //The path is populated by the select which is the station
     //This generates the flask query and creates the URL that holds the data
-    
-    var path = '/daily/'+document.getElementById("Input").value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            // Parsing the JSON response to be able to access the elements
-            daily = JSON.parse(xmlhttp.responseText);
-            
-        
+    $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
+ 
             //to access the data need to delve one level deeper by access the name of the array created in the flask query.
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
@@ -396,8 +387,8 @@ function drawVisualization() {
                 chartArea: {'width': '73%'},
       title : document.getElementById("Input").value, 
         legend: {position: 'in'},
-	  vAxis: {title: 'Hourly Station Data '},	
-      hAxis: {title: 'Time'},
+	  vAxis: {title: 'Daily Avg Station Data '},	
+      hAxis: {title: 'Day'},
       seriesType: 'bars',
       series: {2: {type: 'line'}}
     };
@@ -405,29 +396,25 @@ function drawVisualization() {
            
             var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(DATA, options);
-		  	  
-        }
+		 
     }
-    //runs the function using the path generated above.
-    xmlhttp.open("GET", path, true);
-    xmlhttp.send();
+        
+        );
 }
+
    
         
 function drawVisualisation2(x) {
-       //The path is populated by the select which is the station
-    //This generates the flask query and creates the URL that holds the data
-   
-    var path = '/daily/'+document.getElementById("Input").value+'/'+document.getElementById("day").value;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                // Parsing the JSON response to be able to access the elements
-           daily = JSON.parse(xmlhttp.responseText);
-            
-            console.log(daily)
-            
-            //to access the data need to delve one level deeper by access the name of the array created in the flask query.
+    
+    
+           //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data  
+    
+    
+    
+    $.getJSON( "/daily/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
+        
+        console.log(daily);          
 
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
@@ -465,7 +452,7 @@ function drawVisualisation2(x) {
                 chartArea: {'width': '73%'},
       title : document.getElementById("day").value, 
         legend: {position: 'in'},
-	  vAxis: {title: 'Hourly Station Data '},	
+	  vAxis: {title: 'Hourly Avg Station Data '},	
       hAxis: {title: 'Time'},
       seriesType: 'bars',
       series: {2: {type: 'line'}}
@@ -475,12 +462,8 @@ function drawVisualisation2(x) {
     chart.draw(DATA, options2);
 		  	  
         }
-    }
-    
-      //runs the function using the path generated above.
-    xmlhttp.open("GET", path, true);
-    xmlhttp.send();
-}
+    );
+} 
 		
     </script>
 	  
