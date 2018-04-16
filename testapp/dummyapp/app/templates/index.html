@@ -179,10 +179,22 @@ function closeNav() {
 		function initMap() {
 		    directionsService = new google.maps.DirectionsService();
 		    directionsDisplay = new google.maps.DirectionsRenderer();
+			
+			
+			var myStyles =[{
+        		featureType: "poi",
+        		elementType: "labels",
+        		stylers: [
+              		{ visibility: "off" }
+				]
+    		}];
+			
 		    var map = new google.maps.Map(document.getElementById('map'), {
 		        center: new google.maps.LatLng(53.3450, -6.2603),
 		        zoom: 13.1,
-		        mapTypeId: 'roadmap'
+		        mapTypeId: 'roadmap',
+				styles: myStyles 
+
 		    });
 
 		    var points = JSON.parse('{{ data | tojson | safe }}');
@@ -371,7 +383,7 @@ function drawVisualization() {
             stands.push(Math.round(stand));
 
             var data = google.visualization.arrayToDataTable([
-                ['Day', 'Available Bikes', 'Free Stands', 'Rain fall in mm'],
+                ['Day', 'Available Bikes', 'Free Stands', 'Rainfall mm'],
                 ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
                 ['Tuesday', bikes[1], stands[1], parseInt(dublin_weather[1].h)],
                 ['Wednesday', bikes[2], stands[2], parseInt(dublin_weather[2].h)],
@@ -386,13 +398,9 @@ function drawVisualization() {
                 height: 320,
                 colors: ['#008080', '#707ac2', "#7ac270"],
                 backgroundColor: '#e6e6e6',
-                title: averages[i].address,
+                title: "Daily Averages",
                 legend: {
-                    position: 'bottom'
-                },
-
-                vAxis: {
-                    title: 'Avg Station Occupancy '
+                    position: 'in'
                 },
                 hAxis: {
                     title: 'Day'
@@ -446,11 +454,9 @@ function drawVisualization2() {
             stand = avg_data[i].ast;
             bikes.push(Math.round(bike));
             stands.push(Math.round(stand));
-            //  console.log(bikes);
-
 
             var data2 = google.visualization.arrayToDataTable([
-                ['Time', 'Available Bikes', 'Free Stands', 'Rain Fall in mm'],
+                ['Time', 'Available Bikes', 'Free Stands', 'Rainfall mm'],
                 ['6am', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
                 ['7am', bikes[1], stands[1], parseInt(dublin_weather[0].h)],
                 ['8am', bikes[2], stands[2], parseInt(dublin_weather[0].h)],
@@ -476,16 +482,12 @@ function drawVisualization2() {
                 height: 345,
                 colors: ['#008080', '#707ac2', "#7ac270"],
                 backgroundColor: '#e6e6e6',
-                title: averages[i].address,
+                title: 'Hourly Averages',
                 legend: {
-                    position: 'bottom'
-                },
-
-                vAxis: {
-                    title: 'Hourly Averages '
+                    position: 'in'
                 },
                 hAxis: {
-                    title: 'Day'
+                    title: 'Hour'
                 },
                 seriesType: 'bars',
                 series: {
@@ -502,7 +504,6 @@ function drawVisualization2() {
     chart.draw(data2, options2);
 
 }
-		
 		
     </script>
 	  
