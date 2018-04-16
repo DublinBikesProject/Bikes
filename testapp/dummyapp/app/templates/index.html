@@ -72,7 +72,7 @@
 
         <div id="navbar">
         <div class="dropdown">
-            <select  id="Input" onchange="myFunction();drawVisualization();drawVisualization2();"></select>
+            <select  id="Input" onchange="myFunction();drawVisualization();"></select>
         </div> 
         <div id='box'>
             <!--<div id=weatherButton> 
@@ -358,130 +358,103 @@ function closeNav() {
 //google.charts.setOnLoadCallback(drawVisualization);
 
 function drawVisualization() {
-    // Some raw data (not necessarily accurate)
-
-    var station = document.getElementById("Input").value;
-
-    var averages = JSON.parse('{{ averages | tojson | safe }}');
-
-    var avg_data = [];
-
-    for (var i = 0; i < averages.length; i++) {
-
-        avg_data.push(averages[i]);
-        //console.log(avg_data);
-
-    }
-
-    var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}');
-
-    var dublin_weather = [];
-
-    for (var i = 0; i < hist_weather.length; i++) {
-
-        dublin_weather.push(hist_weather[i]);
-
-    }
-    var bikes = [];
-    var stands = [];
-    for (var i = 0; i < avg_data.length; i++) {
-        if (avg_data[i].address == station) {
-
-            bike = avg_data[i].ab;
-            stand = avg_data[i].ast;
-            bikes.push(Math.round(bike));
-            stands.push(Math.round(stand));
-
-            var data = google.visualization.arrayToDataTable([
-                ['Day', 'Available Bikes', 'Free Stands', 'Rainfall mm'],
-                ['Monday', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
-                ['Tuesday', bikes[1], stands[1], parseInt(dublin_weather[1].h)],
-                ['Wednesday', bikes[2], stands[2], parseInt(dublin_weather[2].h)],
-                ['Thursday', bikes[3], stands[3], parseInt(dublin_weather[3].h)],
-                ['Friday', bikes[4], stands[4], parseInt(dublin_weather[4].h)],
-                ['Saturday', bikes[5], stands[5], parseInt(dublin_weather[5].h)],
-                ['Sunday', bikes[6], stands[6], parseInt(dublin_weather[6].h)]
+    //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data
+    
+    var path = '/daily/'+document.getElementById("Input").value;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            // Parsing the JSON response to be able to access the elements
+            daily = JSON.parse(xmlhttp.responseText);
+            
+        
+            //to access the data need to delve one level deeper by access the name of the array created in the flask query.
+            var DATA = google.visualization.arrayToDataTable([
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
+                ['Monday', daily.data[2].ab, daily.data[2].ast,],
+                ['Tuesday', daily.data[6].ab, daily.data[6].ast],
+                ['Wednesday', daily.data[7].ab, daily.data[7].ast],
+                ['Thursday', daily.data[5].ab, daily.data[5].ast],
+                ['Friday', daily.data[1].ab, daily.data[1].ast],
+                ['Saturday', daily.data[3].ab, daily.data[3].ast],
+                ['Sunday', daily.data[4].ab, daily.data[4].ast],
             ]);
-
-            var options = {
-                width: 550,
-                height: 320,
+ 
+    
+   var options = {
+                width: 575,
+                height: 345,
                 colors: ['#008080', '#707ac2', "#7ac270"],
                 backgroundColor: '#e6e6e6',
-                title: "Daily Averages",
-                legend: {
-                    position: 'in'
-                },
-                hAxis: {
-                    title: 'Day'
-                },
-                seriesType: 'bars',
-                series: {
-                    2: {
-                        type: 'line'
-                    }
-                }
-            };
-
+                chartArea: {'width': '73%'},
+      title : document.getElementById("Input").value, 
+        legend: {position: 'in'},
+	  vAxis: {title: 'Hourly Station Data '},	
+      hAxis: {title: 'Time'},
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	  
+           
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart.draw(DATA, options);
+		  	  
         }
     }
-
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-
+    //runs the function using the path generated above.
+    xmlhttp.open("GET", path, true);
+    xmlhttp.send();
 }
-
+   
+        
 function drawVisualisation2(x) {
-    // Take in a day as the argument, and pass that to the url to activate the appropriate
-    // database query via flask
-
+       //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data
+   
     var path = '/daily/'+document.getElementById("Input").value+'/'+x;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            // Parse the JSON response
-            daily_json_data = JSON.parse(xmlhttp.responseText);
+                // Parsing the JSON response to be able to access the elements
+           daily = JSON.parse(xmlhttp.responseText);
             
-            var name = document.getElementById("Input").value;
+            console.log(daily)
             
-            console.log(daily_json_data)
+            //to access the data need to delve one level deeper by access the name of the array created in the flask query.
 
-            // Format data for Google Chart
-            // In each array element, the first value is the x value (time)
-            // The second value is the y value (average bikes available during any given hour)
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
-                ['00:00', daily_json_data.Hourly[0].ab, daily_json_data.Hourly[0].ast],
-                ['01:00', daily_json_data.Hourly[1].ab, daily_json_data.Hourly[1].ast],
-                ['02:00', daily_json_data.Hourly[2].ab, daily_json_data.Hourly[2].ast],
-                ['03:00', daily_json_data.Hourly[3].ab, daily_json_data.Hourly[3].ast],
-                ['04:00', daily_json_data.Hourly[4].ab, daily_json_data.Hourly[4].ast],
-                ['05:00', daily_json_data.Hourly[5].ab, daily_json_data.Hourly[5].ast],
-                ['06:00', daily_json_data.Hourly[6].ab, daily_json_data.Hourly[6].ast],
-                ['07:00', daily_json_data.Hourly[7].ab, daily_json_data.Hourly[7].ast],
-                ['08:00', daily_json_data.Hourly[8].ab, daily_json_data.Hourly[8].ast],
-                ['09:00', daily_json_data.Hourly[9].ab, daily_json_data.Hourly[9].ast],
-                ['10:00', daily_json_data.Hourly[10].ab, daily_json_data.Hourly[10].ast],
-                ['11:00', daily_json_data.Hourly[11].ab, daily_json_data.Hourly[11].ast],
-                ['12:00', daily_json_data.Hourly[12].ab, daily_json_data.Hourly[12].ast],
-                ['13:00', daily_json_data.Hourly[13].ab, daily_json_data.Hourly[13].ast],
-                ['14:00', daily_json_data.Hourly[14].ab, daily_json_data.Hourly[14].ast],
-                ['15:00', daily_json_data.Hourly[15].ab, daily_json_data.Hourly[15].ast],
-                ['16:00', daily_json_data.Hourly[16].ab, daily_json_data.Hourly[16].ast],
-                ['17:00', daily_json_data.Hourly[17].ab, daily_json_data.Hourly[17].ast],
-                ['18:00', daily_json_data.Hourly[18].ab, daily_json_data.Hourly[18].ast],
-                ['19:00', daily_json_data.Hourly[19].ab, daily_json_data.Hourly[19].ast],
-                ['20:00', daily_json_data.Hourly[20].ab, daily_json_data.Hourly[20].ast],
-                ['21:00', daily_json_data.Hourly[21].ab, daily_json_data.Hourly[21].ast],
-                ['22:00', daily_json_data.Hourly[22].ab, daily_json_data.Hourly[22].ast],
-                ['23:00', daily_json_data.Hourly[23].ab, daily_json_data.Hourly[23].ast], 
+                ['00:00', daily.Hourly[0].ab, daily.Hourly[0].ast],
+                ['01:00', daily.Hourly[1].ab, daily.Hourly[1].ast],
+                ['02:00', daily.Hourly[2].ab, daily.Hourly[2].ast],
+                ['03:00', daily.Hourly[3].ab, daily.Hourly[3].ast],
+                ['04:00', daily.Hourly[4].ab, daily.Hourly[4].ast],
+                ['05:00', daily.Hourly[5].ab, daily.Hourly[5].ast],
+                ['06:00', daily.Hourly[6].ab, daily.Hourly[6].ast],
+                ['07:00', daily.Hourly[7].ab, daily.Hourly[7].ast],
+                ['08:00', daily.Hourly[8].ab, daily.Hourly[8].ast],
+                ['09:00', daily.Hourly[9].ab, daily.Hourly[9].ast],
+                ['10:00', daily.Hourly[10].ab, daily.Hourly[10].ast],
+                ['11:00', daily.Hourly[11].ab, daily.Hourly[11].ast],
+                ['12:00', daily.Hourly[12].ab, daily.Hourly[12].ast],
+                ['13:00', daily.Hourly[13].ab, daily.Hourly[13].ast],
+                ['14:00', daily.Hourly[14].ab, daily.Hourly[14].ast],
+                ['15:00', daily.Hourly[15].ab, daily.Hourly[15].ast],
+                ['16:00', daily.Hourly[16].ab, daily.Hourly[16].ast],
+                ['17:00', daily.Hourly[17].ab, daily.Hourly[17].ast],
+                ['18:00', daily.Hourly[18].ab, daily.Hourly[18].ast],
+                ['19:00', daily.Hourly[19].ab, daily.Hourly[19].ast],
+                ['20:00', daily.Hourly[20].ab, daily.Hourly[20].ast],
+                ['21:00', daily.Hourly[21].ab, daily.Hourly[21].ast],
+                ['22:00', daily.Hourly[22].ab, daily.Hourly[22].ast],
+                ['23:00', daily.Hourly[23].ab, daily.Hourly[23].ast], 
             ]);
  
-            // Display options for the chart
    var options2 = {
                 width: 720,
                 height: 345,
-                colors: ['#008080', '#707ac2', "#7ac270"],
+                colors: ['#008080', '#707ac2', "#7ac270", "#7ac270"],
                 backgroundColor: '#e6e6e6',
                 chartArea: {'width': '73%'},
       title : x, 
@@ -491,14 +464,14 @@ function drawVisualisation2(x) {
       seriesType: 'bars',
       series: {2: {type: 'line'}}
     };
-	  
-            // Select the HTML div element to display the chart, and draw the chart
+	   //draw the chart in the approporate div element
             var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
     chart.draw(DATA, options2);
 		  	  
         }
     }
-    // Run the above function using the specified URL
+    
+      //runs the function using the path generated above.
     xmlhttp.open("GET", path, true);
     xmlhttp.send();
 }
