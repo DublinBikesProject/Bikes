@@ -64,8 +64,8 @@ def main():
             temp_min = data['list'][0]['main']['temp_min']
             temp_max = data['list'][0]['main']['temp_max']
             windspeed = data['list'][0]['wind']['speed']
-            threeH_rain_predict = data['list'][2]['rain']['3h']
-            future_icon = data['list'][2]['weather'][0]['icon']
+            threeH_rain_predict = data['list'][1]['rain']['3h']
+            future_icon = data['list'][1]['weather'][0]['icon']
             
             data = [id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, windspeed, threeH_rain_predict, future_icon]
             insertDb(data, db)
