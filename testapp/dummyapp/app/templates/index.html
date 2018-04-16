@@ -58,6 +58,16 @@
           
        
     <div id="map"></div>
+            <div> <!-- Buttons to toggle what day information is displayed for -->
+                <input type="button" value="Monday" onclick="drawVisualisation2('Monday');">
+                <input type="button" value="Tuesday" onclick="drawVisualisation2('Tuesday');">
+                <input type="button" value="Wednesday" onclick="drawVisualisation2('Wednesday');">
+                <input type="button" value="Thursday" onclick="drawVisualisation2('Thursday');">
+                <input type="button" value="Friday" onclick="drawVisualisation2('Friday');">
+                <input type="button" value="Saturday" onclick="drawVisualisation2('Saturday');">
+                <input type="button" value="Sunday" onclick="drawVisualisation2('Sunday');">
+            </div>
+          
         <div id="test"></div> 
 
         <div id="navbar">
@@ -421,88 +431,76 @@ function drawVisualization() {
 
 }
 
-function drawVisualization2() {
-    // Some raw data (not necessarily accurate)
+function drawVisualisation2(x) {
+    // Take in a day as the argument, and pass that to the url to activate the appropriate
+    // database query via flask
 
-    var station = document.getElementById("Input").value;
+    var path = '/daily/'+document.getElementById("Input").value+'/'+x;
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            // Parse the JSON response
+            daily_json_data = JSON.parse(xmlhttp.responseText);
+            
+            var name = document.getElementById("Input").value;
+            
+            console.log(daily_json_data)
 
-    var averages = JSON.parse('{{ averages2 | tojson | safe }}');
-
-    var avg_data = [];
-
-    for (var i = 0; i < averages.length; i++) {
-
-        avg_data.push(averages[i]);
-
-    }
-
-    var hist_weather = JSON.parse('{{ dublin_weather | tojson | safe }}');
-
-    var dublin_weather = [];
-
-    for (var i = 0; i < hist_weather.length; i++) {
-
-        dublin_weather.push(hist_weather[i]);
-
-    }
-    var bikes = [];
-    var stands = [];
-    for (var i = 0; i < avg_data.length; i++) {
-        if (avg_data[i].address == station) {
-
-            bike = avg_data[i].ab;
-            stand = avg_data[i].ast;
-            bikes.push(Math.round(bike));
-            stands.push(Math.round(stand));
-
-            var data2 = google.visualization.arrayToDataTable([
-                ['Time', 'Available Bikes', 'Free Stands', 'Rainfall mm'],
-                ['6am', bikes[0], stands[0], parseInt(dublin_weather[0].h)],
-                ['7am', bikes[1], stands[1], parseInt(dublin_weather[0].h)],
-                ['8am', bikes[2], stands[2], parseInt(dublin_weather[0].h)],
-                ['9am', bikes[3], stands[3], parseInt(dublin_weather[0].h)],
-                ['10am', bikes[4], stands[4], parseInt(dublin_weather[0].h)],
-                ['11am', bikes[5], stands[5], parseInt(dublin_weather[0].h)],
-                ['12pm', bikes[6], stands[6], parseInt(dublin_weather[0].h)],
-                ['1pm', bikes[7], stands[7], parseInt(dublin_weather[0].h)],
-                ['2pm', bikes[8], stands[8], parseInt(dublin_weather[0].h)],
-                ['3pm', bikes[9], stands[9], parseInt(dublin_weather[0].h)],
-                ['4pm', bikes[10], stands[10], parseInt(dublin_weather[0].h)],
-                ['5pm', bikes[11], stands[11], parseInt(dublin_weather[0].h)],
-                ['6pm', bikes[12], stands[12], parseInt(dublin_weather[0].h)],
-                ['7pm', bikes[13], stands[13], parseInt(dublin_weather[0].h)],
-                ['8pm', bikes[14], stands[14], parseInt(dublin_weather[0].h)],
-                ['9pm', bikes[15], stands[15], parseInt(dublin_weather[0].h)],
-                ['10pm', bikes[16], stands[16], parseInt(dublin_weather[0].h)],
-                ['11pm', bikes[17], stands[17], parseInt(dublin_weather[0].h)]
+            // Format data for Google Chart
+            // In each array element, the first value is the x value (time)
+            // The second value is the y value (average bikes available during any given hour)
+            var DATA = google.visualization.arrayToDataTable([
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
+                ['00:00', daily_json_data.Hourly[0].ab, daily_json_data.Hourly[0].ast],
+                ['01:00', daily_json_data.Hourly[1].ab, daily_json_data.Hourly[1].ast],
+                ['02:00', daily_json_data.Hourly[2].ab, daily_json_data.Hourly[2].ast],
+                ['03:00', daily_json_data.Hourly[3].ab, daily_json_data.Hourly[3].ast],
+                ['04:00', daily_json_data.Hourly[4].ab, daily_json_data.Hourly[4].ast],
+                ['05:00', daily_json_data.Hourly[5].ab, daily_json_data.Hourly[5].ast],
+                ['06:00', daily_json_data.Hourly[6].ab, daily_json_data.Hourly[6].ast],
+                ['07:00', daily_json_data.Hourly[7].ab, daily_json_data.Hourly[7].ast],
+                ['08:00', daily_json_data.Hourly[8].ab, daily_json_data.Hourly[8].ast],
+                ['09:00', daily_json_data.Hourly[9].ab, daily_json_data.Hourly[9].ast],
+                ['10:00', daily_json_data.Hourly[10].ab, daily_json_data.Hourly[10].ast],
+                ['11:00', daily_json_data.Hourly[11].ab, daily_json_data.Hourly[11].ast],
+                ['12:00', daily_json_data.Hourly[12].ab, daily_json_data.Hourly[12].ast],
+                ['13:00', daily_json_data.Hourly[13].ab, daily_json_data.Hourly[13].ast],
+                ['14:00', daily_json_data.Hourly[14].ab, daily_json_data.Hourly[14].ast],
+                ['15:00', daily_json_data.Hourly[15].ab, daily_json_data.Hourly[15].ast],
+                ['16:00', daily_json_data.Hourly[16].ab, daily_json_data.Hourly[16].ast],
+                ['17:00', daily_json_data.Hourly[17].ab, daily_json_data.Hourly[17].ast],
+                ['18:00', daily_json_data.Hourly[18].ab, daily_json_data.Hourly[18].ast],
+                ['19:00', daily_json_data.Hourly[19].ab, daily_json_data.Hourly[19].ast],
+                ['20:00', daily_json_data.Hourly[20].ab, daily_json_data.Hourly[20].ast],
+                ['21:00', daily_json_data.Hourly[21].ab, daily_json_data.Hourly[21].ast],
+                ['22:00', daily_json_data.Hourly[22].ab, daily_json_data.Hourly[22].ast],
+                ['23:00', daily_json_data.Hourly[23].ab, daily_json_data.Hourly[23].ast], 
             ]);
-
-            var options2 = {
+ 
+            // Display options for the chart
+   var options2 = {
                 width: 720,
                 height: 345,
                 colors: ['#008080', '#707ac2', "#7ac270"],
                 backgroundColor: '#e6e6e6',
-                title: 'Hourly Averages',
-                legend: {
-                    position: 'in'
-                },
-                hAxis: {
-                    title: 'Hour'
-                },
-                seriesType: 'bars',
-                series: {
-                    2: {
-                        type: 'line'
-                    }
-                }
-            };
-
+                chartArea: {'width': '73%'},
+      title : x, 
+        legend: {position: 'in'},
+	  vAxis: {title: 'Hourly Station Data '},	
+      hAxis: {title: 'Time'},
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	  
+            // Select the HTML div element to display the chart, and draw the chart
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+    chart.draw(DATA, options2);
+		  	  
         }
     }
-
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
-    chart.draw(data2, options2);
-
+    // Run the above function using the specified URL
+    xmlhttp.open("GET", path, true);
+    xmlhttp.send();
 }
 		
     </script>

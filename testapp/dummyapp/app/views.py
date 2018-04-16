@@ -36,7 +36,6 @@ def avgWeather():
         data.append(dict(row))
     return jsonify(data=data)
 
-
 @app.route("/locs")
 def get_locs():
     #print("1")
