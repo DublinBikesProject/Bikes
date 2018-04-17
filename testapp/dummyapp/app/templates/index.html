@@ -408,45 +408,36 @@ function drawVisualization() {
 }
 
    
-        
-function drawVisualisation2(x) {
+ function drawVisualisation2(x) {
     
     
            //The path is populated by the select which is the station
     //This generates the flask query and creates the URL that holds the data  
-    
-    
     
     $.getJSON( "/daily/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
         
         console.log(daily);          
 
             var DATA = google.visualization.arrayToDataTable([
-                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands'],
-                ['00:00', daily.Hourly[0].ab, daily.Hourly[0].ast],
-                ['01:00', daily.Hourly[1].ab, daily.Hourly[1].ast],
-                ['02:00', daily.Hourly[2].ab, daily.Hourly[2].ast],
-                ['03:00', daily.Hourly[3].ab, daily.Hourly[3].ast],
-                ['04:00', daily.Hourly[4].ab, daily.Hourly[4].ast],
-                ['05:00', daily.Hourly[5].ab, daily.Hourly[5].ast],
-                ['06:00', daily.Hourly[6].ab, daily.Hourly[6].ast],
-                ['07:00', daily.Hourly[7].ab, daily.Hourly[7].ast],
-                ['08:00', daily.Hourly[8].ab, daily.Hourly[8].ast],
-                ['09:00', daily.Hourly[9].ab, daily.Hourly[9].ast],
-                ['10:00', daily.Hourly[10].ab, daily.Hourly[10].ast],
-                ['11:00', daily.Hourly[11].ab, daily.Hourly[11].ast],
-                ['12:00', daily.Hourly[12].ab, daily.Hourly[12].ast],
-                ['13:00', daily.Hourly[13].ab, daily.Hourly[13].ast],
-                ['14:00', daily.Hourly[14].ab, daily.Hourly[14].ast],
-                ['15:00', daily.Hourly[15].ab, daily.Hourly[15].ast],
-                ['16:00', daily.Hourly[16].ab, daily.Hourly[16].ast],
-                ['17:00', daily.Hourly[17].ab, daily.Hourly[17].ast],
-                ['18:00', daily.Hourly[18].ab, daily.Hourly[18].ast],
-                ['19:00', daily.Hourly[19].ab, daily.Hourly[19].ast],
-                ['20:00', daily.Hourly[20].ab, daily.Hourly[20].ast],
-                ['21:00', daily.Hourly[21].ab, daily.Hourly[21].ast],
-                ['22:00', daily.Hourly[22].ab, daily.Hourly[22].ast],
-                ['23:00', daily.Hourly[23].ab, daily.Hourly[23].ast], 
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
+                ['06:00', daily.Hourly[6].ab, daily.Hourly[6].ast, daily.Hourly[24].r],
+                ['07:00', daily.Hourly[7].ab, daily.Hourly[7].ast, daily.Hourly[25].r],
+                ['08:00', daily.Hourly[8].ab, daily.Hourly[8].ast, daily.Hourly[26].r],
+                ['09:00', daily.Hourly[9].ab, daily.Hourly[9].ast, daily.Hourly[27].r],
+                ['10:00', daily.Hourly[10].ab, daily.Hourly[10].ast, daily.Hourly[28].r],
+                ['11:00', daily.Hourly[11].ab, daily.Hourly[11].ast, daily.Hourly[29].r],
+                ['12:00', daily.Hourly[12].ab, daily.Hourly[12].ast, daily.Hourly[30].r],
+                ['13:00', daily.Hourly[13].ab, daily.Hourly[13].ast, daily.Hourly[31].r],
+                ['14:00', daily.Hourly[14].ab, daily.Hourly[14].ast, daily.Hourly[32].r],
+                ['15:00', daily.Hourly[15].ab, daily.Hourly[15].ast, daily.Hourly[33].r],
+                ['16:00', daily.Hourly[16].ab, daily.Hourly[16].ast, daily.Hourly[34].r],
+                ['17:00', daily.Hourly[17].ab, daily.Hourly[17].ast, daily.Hourly[35].r],
+                ['18:00', daily.Hourly[18].ab, daily.Hourly[18].ast, daily.Hourly[36].r],
+                ['19:00', daily.Hourly[19].ab, daily.Hourly[19].ast, daily.Hourly[37].r],
+                ['20:00', daily.Hourly[20].ab, daily.Hourly[20].ast, daily.Hourly[38].r],
+                ['21:00', daily.Hourly[21].ab, daily.Hourly[21].ast, daily.Hourly[39].r],
+                ['22:00', daily.Hourly[22].ab, daily.Hourly[22].ast, daily.Hourly[40].r],
+                ['23:00', daily.Hourly[23].ab, daily.Hourly[23].ast, daily.Hourly[41].r], 
             ]);
  
    var options2 = {
@@ -468,7 +459,7 @@ function drawVisualisation2(x) {
 		  	  
         }
     );
-} 
+}  
 		
     </script>
 	  
