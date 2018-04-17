@@ -1,0 +1,1 @@
+address,round(avg(available_bikes)),HOUR,DOW,last_update
