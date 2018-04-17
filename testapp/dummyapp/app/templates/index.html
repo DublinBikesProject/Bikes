@@ -30,14 +30,14 @@
       <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap"></script>
   </head>
-  <body onload="myFunctionL()" style="margin:0;">
+  <body onload="myFunctionL()" style="margin:0; overflow: hidden;">
 	  <div id="overlay">
      <img src="../static/bike_gif.gif" alt="Loading" /> 
 </div>
 	  <div style="display:none; width:100%; height:100%;" id="myDiv" class="animate-bottom">
           <img src="../static/dublinbike.png" id="logo">
              <div id="sidebar" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()"></a>-->
                  
                  
   <a href="https://www.facebook.com/dublinbikes/"><img src=../static/facebook.png class="links"></a>
@@ -47,7 +47,7 @@
                  
 </div>
           
-          <span style="font-size:30px;cursor:pointer" onclick="openNav()"><img src="../static/burger_menu.png" id="burger"></span>
+          <span style="font-size:30px;cursor:pointer" onclick="openNav()" onclick="closeNav()"><img src="../static/burger_menu.png" id="burger"></span>
 
       <header>
     
@@ -110,10 +110,14 @@
 		}
         
         /* Set the width of the side navigation to 250px */
+        document.getElementById("sidebar").addEventListener('click', openNav);
 function openNav() {
     document.getElementById("sidebar").style.width = "80px";
+    
 }
 
+    
+ document.getElementById("sidebar").addEventListener('click', closeNav);  
 function closeNav() {
     document.getElementById("sidebar").style.width = "0";
 }
@@ -187,7 +191,7 @@ function closeNav() {
         function displayWeather() {
                     if (extra.style.display === "none") {
                         extra.style.display = "block";
-                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + minTemp + "°C, <br>Maximum Temperature: >" + maxTemp + "°C, <br>Windspeed" + windspeed;
+                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + minTemp + "°C, <br>Maximum Temperature: " + maxTemp + "°C, <br>Windspeed" + windspeed;
                 } else {
                     extra.style.display = "none";
                 }
@@ -225,7 +229,7 @@ function closeNav() {
 			
 		    var map = new google.maps.Map(document.getElementById('map'), {
 		        center: new google.maps.LatLng(53.3450, -6.2603),
-		        zoom: 13.1,
+		        zoom: 14,
 		        mapTypeId: 'roadmap',
 				styles: myStyles 
 
