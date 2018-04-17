@@ -55,22 +55,33 @@ header {
 #weatherButton {
     cursor: pointer;
     position: absolute;
-    left: 2%;
-    width: 8%;
-    top: 70%;
+    left: 3%;
+    width: 25%;
+    height: 4%;
+    top: 0%;
     z-index: 2;
     color: black; 
     display: inline-block;
     font-size: 1.5vw;
-    background-color: #F5F5F5;
+    background-color: #124250;
+    color: #e6e6e6;
     text-align: center;
 }
 
-#temp {
-    position: absolute;
+#icons {
+    width: 7%;
+    position: relative;
+    left: 10%;
     top: 0%;
-    font-size: 1.5vw;
-    margin-right: 
+    display: inline;
+}
+
+#temperature {
+    position: relative;
+    left: 7%;
+    top: 0%;
+    display: inline-block;
+    
 }
 
 #dayDB {
@@ -229,6 +240,17 @@ select {
     color: darkgray;
     font-size: 3vw;
     padding: 2%;
+}
+
+#extraWeather {
+    width: 100%;
+    height: 100%; 
+    text-align: center;
+    background-color: #124250;
+    color: #e6e6e6;
+    font-size: 1vw;
+    opacity: 0.7;
+    
 }
 
 .links {

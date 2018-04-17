@@ -50,10 +50,13 @@
           <span style="font-size:30px;cursor:pointer" onclick="openNav()"><img src="../static/burger_menu.png" id="burger"></span>
 
       <header>
-        <div id='pageTitle'>
-            <h1 id='title'>Dublin Bikes Information Hub</h1>
-                
-        </div>
+    
+        
+        <div id="weatherButton" onclick='displayWeather()'>
+            <div id='weather'></div>
+            <div id="extraWeather" style="display:none;"></div>
+          </div>
+            
     </header>
           
        
@@ -81,7 +84,7 @@
         <div id='box'>
             <!--<div id=weatherButton> 
                 <div id='weather'></div>
-                <div id='clock'></div>
+                
             </div>-->
         </div>
     </div>
@@ -169,26 +172,44 @@ function closeNav() {
 		var weatherData = JSON.parse('{{ weather | tojson | safe }}');
 		var temp = weatherData[0].temp;
 		var icon = weatherData[0].icon;
+        var pressure = weatherData[0].pressure;
+        var humidity = weatherData[0].humidity;
+        var minTemp = weatherData[0].temp_min;
+        var maxTemp = weatherData[0].temp_max;
+        var windspeed = weatherData[0].windspeed; 
 
 		var weatherWidget = "<div id='weatherWidget'>";
-		weatherWidget += temp + "°" + "<img src=../static/" + icon + ".png id='icons'/>";
+		weatherWidget += "<span id='temperature'>" + Math.round(temp) + "°</span>" + "<img src=../static/" + icon + ".png id='icons'/>";
 		document.getElementById('weather').innerHTML = weatherWidget;
+        var extra = document.getElementById("extraWeather");
+        
+        
+        function displayWeather() {
+                    if (extra.style.display === "none") {
+                        extra.style.display = "block";
+                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + minTemp + "°C, <br>Maximum Temperature: >" + maxTemp + "°C, <br>Windspeed" + windspeed;
+                } else {
+                    extra.style.display = "none";
+                }
+        
+            
+        }
 
 		    // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
 
 		    var pos;
-		(function() {
-		    var clockElement = document.getElementById("clock");
+		//(function() {
+		  //  var clockElement = document.getElementById("clock");
 
-		    function updateClock(clock) {
-		        clock.innerHTML = new Date().toLocaleTimeString();
-		    }
+//		    function updateClock(clock) {
+//		        clock.innerHTML = new Date().toLocaleTimeString();
+//		    }
 
-		    setInterval(function() {
-		        updateClock(clockElement);
-		    }, 1000);
+//		    setInterval(function() {
+//		        updateClock(clockElement);
+//		    }, 1000);
 
-		}());
+//		}());
 
 		function initMap() {
 		    directionsService = new google.maps.DirectionsService();
