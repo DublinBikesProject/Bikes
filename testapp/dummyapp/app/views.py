@@ -14,6 +14,9 @@ def get_hourly(name, day):
     rows = connect.execute("SELECT AVG(available_bikes) as ab, AVG(available_bike_stands) as ast, hour FROM bikes WHERE address ='{}' AND dOW = '{}' GROUP BY hour".format(name, day))
     for row in rows:
         Hourly.append(dict(row))
+    rows = connect.execute("SELECT HOUR, DOW, avg(rain_in_mm) as r FROM sqlpublic.dublin_hourly_rain WHERE DOW = '{}' Group by HOUR;".format(day))
+    for row in rows:
+        Hourly.append(dict(row))
     return jsonify(Hourly=Hourly)
 
 @app.route('/daily/<name>')
@@ -24,9 +27,13 @@ def get_daily(name):
     rows = connect.execute("SELECT DOW, address, AVG(available_bikes) as ab, AVG(available_bike_stands) as ast, hour FROM bikes WHERE address ='{}' GROUP BY DOW".format(name))
     for row in rows:
         data.append(dict(row))
+    rows = connect.execute("SELECT DOW, avg(rain_mm)as r FROM sqlpublic.dublin_rain GROUP BY DOW;")
+    for row in rows:
+        data.append(dict(row))
     return jsonify(data=data)
 
-@app.route('/weather')
+
+'''@app.route('/weather')
 def avgWeather():
     engine = db_connect()
     connect = engine.connect()
@@ -34,7 +41,7 @@ def avgWeather():
     rows = connect.execute("SELECT DOW, avg(rain_mm)as r FROM sqlpublic.dublin_rain GROUP BY DOW;")
     for row in rows:
         data.append(dict(row))
-    return jsonify(data=data)
+    return jsonify(data=data)'''
 
 @app.route("/locs")
 def get_locs():
@@ -67,7 +74,7 @@ def index():
         weather.append(dict(i))
     jsonify(weather=weather)
 
-    dublin_weather = []
+    ''' dublin_weather = []
     historical_weather = connect.execute("SELECT avg(rain_mm)as h FROM sqlpublic.dublin_rain Where DOW = 'Monday'")
     for i in historical_weather:
         dublin_weather.append(dict(i))
@@ -90,7 +97,7 @@ def index():
     for i in historical_weather:
         dublin_weather.append(dict(i))
     
-    jsonify(dublin_weather=dublin_weather)
+    jsonify(dublin_weather=dublin_weather)'''
 
     '''
     averages = []
@@ -179,4 +186,4 @@ def index():
     
     jsonify(averages2=averages2)'''
     
-    return render_template("index.html", data=points, weather=weather,dublin_weather=dublin_weather)
+    return render_template("index.html", data=points, weather=weather)
