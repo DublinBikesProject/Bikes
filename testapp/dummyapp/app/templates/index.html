@@ -12,10 +12,12 @@
   animation-name: animatebottom;
   animation-duration: 1s
 }
+
 @-webkit-keyframes animatebottom {
   from { bottom:-100px; opacity:0 } 
   to { bottom:0px; opacity:1 }
 }
+
 @keyframes animatebottom { 
   from{ bottom:-100px; opacity:0 } 
   to{ bottom:0; opacity:1 }
@@ -35,25 +37,24 @@
 	  <div style="display:none; width:100%; height:100%;" id="myDiv" class="animate-bottom">
           <img src="../static/dublinbike.png" id="logo">
              <div id="sidebar" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()"></a>-->
                  
                  
   <a href="https://www.facebook.com/dublinbikes/"><img src=../static/facebook.png class="links"></a>
   <a href="https://twitter.com/hashtag/dublinbikes?lang=en"><img src="../static/twitter.png" class="links"></a>
-  <a href="http://www.dublinbikes.ie/"><img src="../static/burger_menu.png" id="burger"><img src="../static/home.png" class='links'></a>
+  <a href="http://www.dublinbikes.ie/"><img src="../static/home.png" class='links'></a>
                  
                  
 </div>
           
-          <span style="font-size:30px;cursor:pointer;" onclick="openNav()" id='menuBtn'><img src="../static/burger_menu.png" id="burger"></span>
+          <span style="font-size:30px;cursor:pointer" onclick="openNav()" onclick="closeNav()"><img src="../static/burger_menu.png" id="burger"></span>
 
       <header>
     
         
         <div id="weatherButton" onclick='displayWeather()'>
             <div id='weather'></div>
-            <div id="extraWeather" style="display:none;">
-            </div>
+            <div id="extraWeather" style="display:none;"></div>
           </div>
             
     </header>
@@ -78,9 +79,10 @@
 
         <div id="navbar">
         <div id="dropdown">
-            <select  id="Input" onchange="myFunction();drawVisualization();"></select>
+            <select  id="Input" onchange="myFunction();drawVisualization();prediction()"></select>
         </div> 
         <div id='box'>
+			
             <!--<div id=weatherButton> 
                 <div id='weather'></div>
                 
@@ -90,6 +92,7 @@
     <div id='textBox'>Welcome to Dublin Bikes<br>Information Hub</div>
 	<div id="chart_div"></div>
 	 <div id="chart_div2"></div>
+		  <div id="pred">pred</div>
 	 </div>
       <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
       
@@ -98,47 +101,60 @@
     <script>
 		
 		var myVar;
+
 		function myFunctionL() {
 		    myVar = setTimeout(showPage, 3000);
 		}
+
 		function showPage() {
 		    document.getElementById("overlay").style.display = "none";
 		    document.getElementById("myDiv").style.display = "block";
 		}
         
-        
         /* Set the width of the side navigation to 250px */
-
+        document.getElementById("sidebar").addEventListener('click', openNav);
 function openNav() {
-        document.getElementById("sidebar").style.width = "80px";
-        
-}
-function closeNav() {
-         document.getElementById("sidebar").style.width = "0";
-}
+    document.getElementById("sidebar").style.width = "80px";
     
+}
+
+    
+ document.getElementById("sidebar").addEventListener('click', closeNav);  
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+}
+
 		var slat;
 		var slng;
 		var y = [];
 		var options = JSON.parse('{{ data | tojson | safe }}');
+
 		$('#Input').append('<option selected="selected" disabled="disabled">Select a station</option>')
+
 		for (var i = 0; i < options.length; i++) {
 		    $('#Input').append('<option value="' + String(options[i].address) + '">' + String(options[i].address) + '</option>');
 		    y.push(options[i]);
 		}
+
 		function myFunction() {
 		    var x = document.getElementById("Input").value;
+
 		    for (var i = 0; i < options.length; i++) {
 		        if (y[i].address == x) {
+
 		            if (y[i].banking == '0') {
 		                x = 'No';
 		            } else if (y[i].banking == '1') {
 		                x = "Yes";
 		            }
+
 		            loclat = y[i].lat;
 		            loclng = y[i].lng;
+
 		            document.getElementById("test").addEventListener('click', showDetails(), false);
+
 		        }
+
 		        function showDetails() {
 		            var popup = document.createElement('div');
 		            popup.className = 'popup';
@@ -154,9 +170,11 @@ function closeNav() {
 		            popup.appendChild(message);
 		            popup.appendChild(cancel);
 		            document.body.appendChild(popup);
+
 		        }
 		    }
 		}
+
 		var weatherData = JSON.parse('{{ weather | tojson | safe }}');
 		var temp = weatherData[0].temp;
 		var icon = weatherData[0].icon;
@@ -164,8 +182,8 @@ function closeNav() {
         var humidity = weatherData[0].humidity;
         var minTemp = weatherData[0].temp_min;
         var maxTemp = weatherData[0].temp_max;
-        var windspeed = weatherData[0].windspeed;
-        var future = weatherData[0].future_icon;
+        var windspeed = weatherData[0].windspeed; 
+
 		var weatherWidget = "<div id='weatherWidget'>";
 		weatherWidget += "<span id='temperature'>" + Math.round(temp) + "°</span>" + "<img src=../static/" + icon + ".png id='icons'/>";
 		document.getElementById('weather').innerHTML = weatherWidget;
@@ -175,23 +193,29 @@ function closeNav() {
         function displayWeather() {
                     if (extra.style.display === "none") {
                         extra.style.display = "block";
-                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + Math.round(minTemp) + "°C <br>Maximum Temperature: " + Math.round(maxTemp) + "°C <br>Windspeed:    " + windspeed + "<br><br><span id='prediction'>In 3 Hours:<br>   " + "<img src=../static/" + future + ".png id='futureIcon'/>";
+                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + minTemp + "°C, <br>Maximum Temperature: " + maxTemp + "°C, <br>Windspeed" + windspeed;
                 } else {
                     extra.style.display = "none";
                 }
         
             
         }
+
 		    // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
+
 		//(function() {
 		  //  var clockElement = document.getElementById("clock");
+
 //		    function updateClock(clock) {
 //		        clock.innerHTML = new Date().toLocaleTimeString();
 //		    }
+
 //		    setInterval(function() {
 //		        updateClock(clockElement);
 //		    }, 1000);
+
 //		}());
+
 		function initMap() {
 		    directionsService = new google.maps.DirectionsService();
 		    directionsDisplay = new google.maps.DirectionsRenderer();
@@ -210,7 +234,9 @@ function closeNav() {
 		        zoom: 14,
 		        mapTypeId: 'roadmap',
 				styles: myStyles 
+
 		    });
+
 		    var points = JSON.parse('{{ data | tojson | safe }}');
 		    var marker;
 		    var current;
@@ -218,17 +244,24 @@ function closeNav() {
 		    var available = points.available_bike_stands;
 		    infoWindow = new google.maps.InfoWindow;
 		    infoBikes = new google.maps.InfoWindow;
+
+
 		    var icon = {
 		        url: '../static/marker.png', // url
 		        scaledSize: new google.maps.Size(30, 50), // scaled size
+
 		    };
+
 		    var bikeicon = {
 		        url: '../static/bike_marker.png', // url
 		        scaledSize: new google.maps.Size(40, 40), // scaled size            
 		    };
+
 		    var markers = [];
 		    for (var i = 0; i < points.length; i++) {
+
 		        var capacity = points[i].available_bikes + points[i].available_bike_stands;
+
 		        var image_url;
 		        //console.log(points[i].available_bikes)
 		        if (points[i].available_bikes <= (capacity * 0.20)) {
@@ -238,16 +271,19 @@ function closeNav() {
 		        } else {
 		            image_url = '../static/bike_marker_free.png';
 		        }
+
 		        var bikeicon = {
 		            url: image_url, // url
 		            scaledSize: new google.maps.Size(40, 40), // scaled size            
 		        };
+
 		        marker = new google.maps.Marker({
 		            position: new google.maps.LatLng(points[i].lat, points[i].lng),
 		            map: map,
 		            animation: google.maps.Animation.DROP,
 		            icon: bikeicon,
 		            title: points[i].address
+
 		        });
 		        markers.push(marker);
 				
@@ -258,15 +294,21 @@ function closeNav() {
 		                icon: icon,
 		                title: 'Me'
 		            });
+
 		        google.maps.event.addListener(marker, 'click', (function(marker, i) {
 		            return function() {
+
 		                infoBikes.open(map, this);
 		                infoBikes.setContent("Station name: " + points[i].address + "<br>Available bikes: " + points[i].available_bikes + "<br>Empty stands: " + points[i].available_bike_stands);
+
 		            }
+
 		        })(marker, i));
+
 		        google.maps.event.addListener(marker, 'dblclick', (function(marker, i) {
 		            return function() {
 		                directionsService.route({
+
 		                    origin: current.position,
 		                    //destination: new google.maps.LatLng(53.3488,-6.28164),
 		                    destination: new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng()),
@@ -281,9 +323,12 @@ function closeNav() {
 		                });
 		            }
 		        })(marker, i));
+
 		        google.maps.event.addDomListener(document.getElementById('Input'), 'change', (function(marker, i) {
 		            return function() {
+
 		                var newX = document.getElementById("Input").value;
+
 		                for (var k = 0; k < points.length; k++) {
 		                    if (y[k].address == newX) {
 		                        slat = y[k].lat;
@@ -291,10 +336,12 @@ function closeNav() {
 		                    }
 		                }
 		                console.log(marker.position.lat() + " " + marker.position.lng());
+
 		                for (var i = 0; i < markers.length; i++) {
 		                    var a = marker.position.lng();
 		                    var b = slng;
 		                    var diff = Math.abs(a - b);
+
 		                    if (marker.position.lat() == slat && diff < 0.00001) {
 		                        marker.setAnimation(google.maps.Animation.BOUNCE);
 		                        setTimeout(function() {
@@ -305,6 +352,7 @@ function closeNav() {
 		            }
 		        })(marker, i));
 		    }
+
 		    directionsDisplay.setMap(map);
 		}
 	
@@ -317,6 +365,7 @@ function closeNav() {
     'packages': ['corechart']
 });
 //google.charts.setOnLoadCallback(drawVisualization);
+
 function drawVisualization() {
     //The path is populated by the select which is the station
     //This generates the flask query and creates the URL that holds the data
@@ -359,6 +408,7 @@ function drawVisualization() {
         
         );
 }
+
    
  function drawVisualisation2(x) {
     
@@ -369,6 +419,7 @@ function drawVisualization() {
     $.getJSON( "/daily/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
         
         console.log(daily);          
+
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
                 ['06:00', daily.Hourly[6].ab, daily.Hourly[6].ast, daily.Hourly[24].r],
@@ -411,6 +462,17 @@ function drawVisualization() {
         }
     );
 }  
+		
+		function prediction() {
+    
+    $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
+        
+       console.log(daily);
+        document.getElementById("pred").innerHTML = "Predicted # of bikes <br> at this station in 3h: "+daily;
+            }
+    );
+        
+    }
 		
     </script>
 	  
