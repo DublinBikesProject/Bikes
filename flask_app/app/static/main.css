@@ -1,0 +1,316 @@
+#overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+#map {
+    height: 40%;
+    width: 100%; 
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Raleway"; 
+    background: #e6e6e6; 
+    margin: 0;
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+    background-color: #124250;
+    width: 100%;
+    height: 4%;
+    background-color: #124250;
+    margin: 0;
+    z-index: 1;
+}
+
+#burger {
+    position: absolute;
+    width: 2%;
+    left: 1%;
+    top: 0%;
+    z-index: 3;
+}
+
+#legend {
+    position: absolute;
+    left: 35%;
+    z-index: 5;
+    color: #e6e6e6;
+}
+
+.legendIcons {
+    display: inline-block;
+    width: 2.5%;
+    z-index: 10;
+}
+#overlay {
+    position: absolute;
+    left: 30%;
+    top: 10%;
+    width: 100%;
+}
+
+#navbar {
+    width: 100%;
+    height: 2.5%;
+    background-color: #124250;
+    margin: 0;
+    z-index: 1;
+    box-shadow: 5px 5px 10px #A9A9A9;
+}
+
+#weatherButton {
+    cursor: pointer;
+    position: absolute;
+    left: 4%;
+    width: 10%;
+    height: 2%;
+    top: 0%;
+    z-index: 2;
+    color: black; 
+    display: inline-block;
+    font-size: 1.5vw;
+    background-color: #124250;
+    color: #e6e6e6;
+    text-align: center;
+}
+
+#icons {
+    width: 100%;
+    position: absolute;
+    left: 5%;
+    top: 0%;
+    display: inline-block;
+}
+
+#temperature {
+    position: absolute;
+    left: 75%;
+    top: 0%;
+    display: inline-block;
+    
+}
+
+#dayDB {
+    top: 43.8%;
+    left: 60%;       
+    position: absolute;
+}
+
+#dropdown {
+    top: 43.8%;
+    left: 35%;       
+    position: absolute;
+    
+}
+
+
+select {
+    
+    background: #124250;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+}
+
+
+#banner {
+    width: 100%;
+    
+}
+
+#chart_div {
+    position: absolute;
+    top: 48.5%;
+    left: 16%;
+    margin: 0; 
+    padding: 0;
+    z-index: 20;
+}
+
+#chart_div2 {
+    position: absolute; 
+    top: 48.5%;
+    left: 51.5%;
+    margin: 0;
+    padding: 0;
+    width: 80%;
+}
+
+#pageTitle {
+    position: absolute;
+    top: 1%;
+    left: 78%;
+    color: white; 
+    text-align: center; 
+    top: 2%;
+}
+
+#title {
+   position: absolute;
+    left: 58%;
+    font-size: 2vw; 
+    
+}
+
+#icons {
+    width: 15%;
+    position: relative;
+    left: 15%;
+    top: 2%;
+}
+
+#logo {
+    width: 4%;
+    position: absolute;
+    left: 90%;
+    top: 0%;
+    z-index: 1;
+}
+
+#futureIcon {
+    width: 15%;
+
+}
+
+#clock {
+    width: 50%;
+    text-align: center;
+}
+
+#bg {
+    position: relative;
+}
+
+.popup { 
+    position: relative;
+    left: 2%;
+    top: 4%;
+    width: 12%;
+    height: 18%;
+    font-size: 0.8vw;
+    text-align: center;
+    padding: 1%;
+    background-color:  #f2f2f2;
+    border: 5px solid #536476;
+    z-index: 30;
+}
+
+.cancel{ /*below from http://jsfiddle.net/WGPhG/6/ which was accessed through https://stackoverflow.com/questions/11542822/javascript-onclick-createelement-div-viz-popup-box*/
+    cursor:pointer;
+    float:right;
+    height: 5%;
+    width: 8%; 
+    text-align: center;
+    font-size: 0.8vw;
+    color: black;
+    z-index: 2;
+    }
+
+#test {
+    top: 60%;
+    left: 1%;       
+    position: absolute;  
+    box-shadow: 5px 5px 10px #A9A9A9;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 40;
+    top: 0;
+    left: 0;
+    background-color: #124250;
+    opacity: 0.8;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 5%;
+}
+
+.sidenav a {
+    padding: 10%;
+    text-decoration: none;
+    font-size: 1vw;
+    color: 	#F5F5F5;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #F5F5F5;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 10%;
+    font-size: 2vw;
+    margin-left: 10%;
+}
+
+@media screen and (max-height: 20%) {
+  .sidenav {padding-top: 5%;}
+  .sidenav a {font-size: 2vw;}
+}
+
+#textBox {
+    text-align: center;
+    width: 100%; 
+    color: darkgray;
+    font-size: 3vw;
+    padding: 2%;
+}
+
+#extraWeather {
+    width: 125%;
+    height: 900%; 
+    background-color: #124250;
+    color: #e6e6e6;
+    font-size: 0.8vw;
+    opacity: 0.8;
+    text-align: center;
+    border-radius: 100px;
+    position: relative; 
+    left: 17%; 
+    top: 5%;
+    padding: 2%;
+}
+
+
+
+.links {
+    width: 60%;
+    padding-bottom: 10%; 
+    opacity: 1;
+    
+}
+
+#pred {
+    top: 77%;
+    left: 4%;       
+    position: absolute;
+    text-align: center; 
+    font-size: 0.8vw;
+    z-index: 35;
+    
+}
+
+footer {
+    width: 100%;
+    height: 2%;
+    text-align: center;
+    font-size: 0.8vw;
+    background-color: #124250; 
+    color: #e6e6e6;
+    
+}
+
+
+

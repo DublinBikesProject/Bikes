@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dublin Bikes</title>
+	  <style>
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+      </style>
+	 
+      <link rel="stylesheet" href="static/main.css">
+      <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUgHP1nB5Nsm9k8IELrBRMpSSueJYA0r4&callback=initMap"></script>
+  </head>
+  <body onload="myFunctionL()" style="margin:0; overflow: hidden;">
+	  <div id="overlay">
+     <img src="../static/bike_gif.gif" alt="Loading" /> 
+</div>
+	  <div style="display:none; width:100%; height:100%;" id="myDiv" class="animate-bottom">
+          <img src="../static/dublinbike.png" id="logo">
+             <div id="sidebar" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                 
+                 
+  <a href="https://www.facebook.com/dublinbikes/"><img src=../static/facebook.png class="links"></a>
+  <a href="https://twitter.com/hashtag/dublinbikes?lang=en"><img src="../static/twitter.png" class="links"></a>
+  <a href="http://www.dublinbikes.ie/"><img src="../static/burger_menu.png" id="burger"><img src="../static/home.png" class='links'></a>
+                 
+                 
+</div>
+          
+          <span style="font-size:30px;cursor:pointer;" onclick="openNav()" id='menuBtn'><img src="../static/burger_menu.png" id="burger"></span>
+
+      <header>
+    
+          <div id='legend'><b>Station Capacity:</b>  Less than 20%: <img src="../static/bike_marker_full.png" class='legendIcons'> Less than 60%: <img src="../static/bike_marker_middle.png" class='legendIcons'> Over 60%: <img src="../static/bike_marker_free.png" class='legendIcons'> <b>1 Click</b> for Info - <b>2 Clicks</b> for Directions</div>
+        <div id="weatherButton" onclick='displayWeather()'>
+            <div id='weather'></div>
+            <div id="extraWeather" style="display:none;"></div>
+          </div>
+            
+    </header>
+          
+       
+    <div id="map"></div>
+            <div id = dayDB> 
+                
+                <select id='day' onchange="drawVisualisation2()">
+                    <option>Select Day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday" >Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option  value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </div>
+          
+        <div id="test"></div> 
+
+        <div id="navbar">
+        <div id="dropdown">
+            <select  id="Input" onchange="myFunction();drawVisualization();prediction()"></select>
+        </div> 
+    </div>
+    <div id='textBox'>Welcome to Dublin Bikes<br>Information Hub</div>
+	<div id="chart_div"></div>
+	 <div id="chart_div2"></div>
+		  <div id="pred"></div>
+	 </div>
+      <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
+      
+	   </body>
+       
+    <script>
+        // Animation for loading the page 
+		var myVar;
+		function myFunctionL() {
+		    myVar = setTimeout(showPage, 3000);
+		}
+        
+        // Function to display the page as animation on load
+		function showPage() {
+		    document.getElementById("overlay").style.display = "none";
+		    document.getElementById("myDiv").style.display = "block";
+		}
+        
+        
+        // Sidebar display onclick
+        document.getElementById("sidebar").addEventListener('click', openNav);
+        
+        // Function to display the sidebar
+        function openNav() {
+            document.getElementById("sidebar").style.width = "80px";
+        }
+  
+        // Function to close the sidebar 
+        document.getElementById("sidebar").addEventListener('click', closeNav);  
+        function closeNav() {
+            document.getElementById("sidebar").style.width = "0";
+        }
+
+		var slat;
+		var slng;
+		var y = [];
+		var options = JSON.parse('{{ data | tojson | safe }}');
+
+        // Function to populates the drop down menu with station names
+		$('#Input').append('<option selected="selected" disabled="disabled">Select a station</option>')
+
+		for (var i = 0; i < options.length; i++) {
+		    $('#Input').append('<option value="' + String(options[i].address) + '">' + String(options[i].address) + '</option>');
+		    y.push(options[i]);
+		}
+
+        // Function to extract the station information when a station is selected
+		function myFunction() {
+		    var x = document.getElementById("Input").value;
+
+		    for (var i = 0; i < options.length; i++) {
+		        if (y[i].address == x) {
+
+		            if (y[i].banking == '0') {
+		                x = 'No';
+		            } else if (y[i].banking == '1') {
+		                x = "Yes";
+		            }
+
+		            loclat = y[i].lat;
+		            loclng = y[i].lng;
+
+		            document.getElementById("test").addEventListener('click', showDetails(), false);
+
+		        }
+
+                // Function to display the station information in a box
+		        function showDetails() {
+		            var popup = document.createElement('div');
+		            popup.className = 'popup';
+		            popup.id = 'test';
+		            
+		            var message = document.createElement('span');
+		            message.innerHTML = "<b>You selected: </b>" + y[i].address + "<br>" + "<b>Available Bikes:</b> " + " " + y[i].available_bikes + "<br> " + "<b>Available Bike Stands:</b> " + y[i].available_bike_stands + " <br>" + "<b>The stop is: </b>" + y[i].status + "<br>" + "<b>Banking Available: </b>" + x + "<br>";
+		            popup.appendChild(message);
+		            document.body.appendChild(popup);
+
+		        }
+		    }
+		}
+
+        // Extracting the weather data from the weather database via Flask
+		var weatherData = JSON.parse('{{ weather | tojson | safe }}');
+		var temp = weatherData[0].temp;
+		var icon = weatherData[0].icon;
+        var pressure = weatherData[0].pressure;
+        var humidity = weatherData[0].humidity;
+        var minTemp = weatherData[0].temp_min;
+        var maxTemp = weatherData[0].temp_max;
+        var windspeed = weatherData[0].windspeed;
+        var future = weatherData[0].future_icon;
+		var weatherWidget = "<div id='weatherWidget'>";
+		weatherWidget += "<span id='temperature'>" + Math.round(temp) + "°</span>" + "<img src=../static/" + icon + ".png id='icons'/>";
+		document.getElementById('weather').innerHTML = weatherWidget;
+        var extra = document.getElementById("extraWeather");
+        
+        // Display the weather data in a weather widget 
+        function displayWeather() {
+                    if (extra.style.display === "none") {
+                        extra.style.display = "block";
+                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + Math.round(minTemp) + "°C <br>Maximum Temperature: " + Math.round(maxTemp) + "°C <br>Windspeed:    " + windspeed + "<br><br><span id='prediction'>In 3 Hours:<br>   " + "<img src=../static/" + future + ".png id='futureIcon'/>";
+                } else {
+                    extra.style.display = "none";
+                } 
+        }
+
+        // Function to display a Google map on the webpafe 
+		function initMap() {
+		    directionsService = new google.maps.DirectionsService();
+		    directionsDisplay = new google.maps.DirectionsRenderer();
+			
+			
+            // Gets rid of Points of Interest to avoid map looking cluttered 
+			var myStyles =[{
+        		featureType: "poi",
+        		elementType: "labels",
+        		stylers: [
+              		{ visibility: "off" }
+				]
+    		}];
+			
+            // Defines the type of map and the position of the centre     
+		    var map = new google.maps.Map(document.getElementById('map'), {
+		        center: new google.maps.LatLng(53.3450, -6.2603),
+		        zoom: 14,
+		        mapTypeId: 'roadmap',
+				styles: myStyles 
+
+		    });
+
+            // Extracting the station information to display the data on the map 
+		    var points = JSON.parse('{{ data | tojson | safe }}');
+		    var marker;
+		    var current;
+		    var infoWindow;
+		    var available = points.available_bike_stands;
+		    infoWindow = new google.maps.InfoWindow;
+		    infoBikes = new google.maps.InfoWindow;
+
+
+            // Sets a unique marker to show the location of the user 
+		    var icon = {
+		        url: '../static/marker.png', // url
+		        scaledSize: new google.maps.Size(30, 50), // scaled size
+
+		    };
+
+            // Display the markers on the map
+		    var markers = [];
+		    for (var i = 0; i < points.length; i++) {
+                
+		        var capacity = points[i].available_bikes + points[i].available_bike_stands;
+
+                // Select the icon image based on station occupancy
+		        var image_url;
+		        if (points[i].available_bikes <= (capacity * 0.20)) {
+		            image_url = "../static/bike_marker_full.png";
+		        } else if (points[i].available_bikes <= (capacity * 0.6)) {
+		            image_url = '../static/bike_marker_middle.png';
+		        } else {
+		            image_url = '../static/bike_marker_free.png';
+		        }
+                
+                // Pass the correct icon
+		        var bikeicon = {
+		            url: image_url, // url
+		            scaledSize: new google.maps.Size(40, 40), // scaled size            
+		        };
+
+                // Display a marker for each station location on the map 
+		        marker = new google.maps.Marker({
+		            position: new google.maps.LatLng(points[i].lat, points[i].lng),
+		            map: map,
+		            animation: google.maps.Animation.DROP,
+		            icon: bikeicon,
+		            title: points[i].address
+
+		        });
+		        markers.push(marker);
+				
+                // To show the current location of the user on the map
+				current = new google.maps.Marker({
+		                position: new google.maps.LatLng(53.3450, -6.2603),
+		                map: map,
+		                animation: google.maps.Animation.DROP,
+		                icon: icon,
+		                title: 'Me'
+		            });
+
+                // Show station information when a marker is clicked 
+		        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+		            return function() {
+
+		                infoBikes.open(map, this);
+		                infoBikes.setContent("Station name: " + points[i].address + "<br>Available bikes: " + points[i].available_bikes + "<br>Empty stands: " + points[i].available_bike_stands);
+
+		            }
+
+		        })(marker, i));
+                
+                // Show directions from current location to selected bike station on double click 
+		        google.maps.event.addListener(marker, 'dblclick', (function(marker, i) {
+		            return function() {
+		                directionsService.route({
+
+		                    origin: current.position,
+		                    //destination: new google.maps.LatLng(53.3488,-6.28164),
+		                    destination: new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng()),
+		                    //destination: new google.maps.LatLng(points[i].lat, points[i].lng), 
+		                    travelMode: 'WALKING'
+		                }, function(response, status) {
+		                    if (status === 'OK') {
+		                        directionsDisplay.setDirections(response);
+		                    } else {
+		                        window.alert('Directions request failed due to ' + status);
+		                    }
+		                });
+		            }
+		        })(marker, i));
+
+                // Function to make the markers bounce when a station is selected in the drop down 
+		        google.maps.event.addDomListener(document.getElementById('Input'), 'change', (function(marker, i) {
+		            return function() {
+
+		                var newX = document.getElementById("Input").value;
+
+		                for (var k = 0; k < points.length; k++) {
+		                    if (y[k].address == newX) {
+		                        slat = y[k].lat;
+		                        slng = y[k].lng;
+		                    }
+		                }
+		                console.log(marker.position.lat() + " " + marker.position.lng());
+
+		                for (var i = 0; i < markers.length; i++) {
+		                    var a = marker.position.lng();
+		                    var b = slng;
+		                    var diff = Math.abs(a - b);
+
+		                    if (marker.position.lat() == slat && diff < 0.00001) {
+		                        marker.setAnimation(google.maps.Animation.BOUNCE);
+		                        setTimeout(function() {
+		                            marker.setAnimation(null);
+		                        }, 1400);
+		                    }
+		                }
+		            }
+		        })(marker, i));
+		    }
+
+		    directionsDisplay.setMap(map);
+		}
+	
+   </script>
+	  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+          
+      google.charts.load('current', {'packages': ['corechart']});
+          
+      //google.charts.setOnLoadCallback(drawVisualization);
+
+                
+ // Function to create the daily graph using app route to create a URL to access the data, which is called onclick
+function drawVisualization() {
+    
+         //The path is populated by the select which is the station
+        //This generates the flask query and creates the URL that holds the data
+    
+    document.getElementById('chart_div2').innerHTML = "";
+    document.getElementById("textBox").innerHTML = "";
+    //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data
+   var jqxhr =  $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
+        
+        console.log(daily);
+ 
+            //to access the data need to delve one level deeper by access the name of the array created in the flask query.
+            var DATA = google.visualization.arrayToDataTable([
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike \n Stands', 'mm rain'],
+                ['Monday', Math.round(daily.data[2].ab), Math.round(daily.data[2].ast), Math.round(daily.data[9].r)],
+                ['Tuesday', Math.round(daily.data[6].ab), Math.round(daily.data[6].ast), Math.round(daily.data[13].r)],
+                ['Wednesday', Math.round(daily.data[7].ab), Math.round(daily.data[7].ast), Math.round(daily.data[14].r)],
+                ['Thursday', Math.round(daily.data[5].ab), Math.round(daily.data[5].ast), Math.round(daily.data[12].r)],
+                ['Friday', Math.round(daily.data[1].ab), Math.round(daily.data[1].ast), Math.round(daily.data[8].r)],
+                ['Saturday', Math.round(daily.data[3].ab), Math.round(daily.data[3].ast), Math.round(daily.data[10].r)],
+                ['Sunday', Math.round(daily.data[4].ab), Math.round(daily.data[4].ast), Math.round(daily.data[11].r)],
+            ]);
+ 
+       
+    // Display and styling of the daily graph
+   var options = {
+                width: 570,
+                height: 345,
+                colors: ['#008080', '#707ac2', "#7ac270"],
+                backgroundColor: '#e6e6e6',
+                chartArea: {'width': '70%'},
+      title : document.getElementById("Input").value + " ~ Daily Averages", 
+        legend: {position: 'bottom'},	
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	  
+        // Display the graph on the webpage 
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart.draw(DATA, options);
+		 
+    }
+        
+        );
+}
+
+// Function to create the hourly graph
+ function drawVisualisation2(x) {
+    
+           //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data  
+     
+     // Function to create the hourly graph using app route to create a URL to access the data, which is called onclick
+    
+    var jqxhr = $.getJSON( "/hourly/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
+        
+        console.log(daily);          
+
+            var DATA = google.visualization.arrayToDataTable([
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
+                ['06:00', Math.round(daily.Hourly[6].ab), Math.round(daily.Hourly[6].ast), Math.round(daily.Hourly[24].r)],
+                ['07:00', Math.round(daily.Hourly[7].ab), Math.round(daily.Hourly[7].ast), Math.round(daily.Hourly[25].r)],
+                ['08:00', Math.round(daily.Hourly[8].ab), Math.round(daily.Hourly[8].ast), Math.round(daily.Hourly[26].r)],
+                ['09:00', Math.round(daily.Hourly[9].ab), Math.round(daily.Hourly[9].ast), Math.round(daily.Hourly[27].r)],
+                ['10:00', Math.round(daily.Hourly[10].ab), Math.round(daily.Hourly[10].ast), Math.round(daily.Hourly[28].r)],
+                ['11:00', Math.round(daily.Hourly[11].ab), Math.round(daily.Hourly[11].ast), Math.round(daily.Hourly[29].r)],
+                ['12:00', Math.round(daily.Hourly[12].ab), Math.round(daily.Hourly[12].ast), Math.round(daily.Hourly[30].r)],
+                ['13:00', Math.round(daily.Hourly[13].ab), Math.round(daily.Hourly[13].ast), Math.round(daily.Hourly[31].r)],
+                ['14:00', Math.round(daily.Hourly[14].ab), Math.round(daily.Hourly[14].ast), Math.round(daily.Hourly[32].r)],
+                ['15:00', Math.round(daily.Hourly[15].ab), Math.round(daily.Hourly[15].ast), Math.round(daily.Hourly[33].r)],
+                ['16:00', Math.round(daily.Hourly[16].ab), Math.round(daily.Hourly[16].ast), Math.round(daily.Hourly[34].r)],
+                ['17:00', Math.round(daily.Hourly[17].ab), Math.round(daily.Hourly[17].ast), Math.round(daily.Hourly[35].r)],
+                ['18:00', Math.round(daily.Hourly[18].ab), Math.round(daily.Hourly[18].ast), Math.round(daily.Hourly[36].r)],
+                ['19:00', Math.round(daily.Hourly[19].ab), Math.round(daily.Hourly[19].ast), Math.round(daily.Hourly[37].r)],
+                ['20:00', Math.round(daily.Hourly[20].ab), Math.round(daily.Hourly[20].ast), Math.round(daily.Hourly[38].r)],
+                ['21:00', Math.round(daily.Hourly[21].ab), Math.round(daily.Hourly[21].ast), Math.round(daily.Hourly[39].r)],
+                ['22:00', Math.round(daily.Hourly[22].ab), Math.round(daily.Hourly[22].ast), Math.round(daily.Hourly[40].r)],
+                ['23:00', Math.round(daily.Hourly[23].ab), Math.round(daily.Hourly[23].ast), Math.round(daily.Hourly[41].r)], 
+            ]);
+ 
+        
+       // Display and styling of the daily graph
+   var options2 = {
+                width: 715,
+                height: 345,
+                colors: ['#008080', '#707ac2', "#7ac270", "#7ac270"],
+                backgroundColor: '#e6e6e6',
+                chartArea: {'width': '70%'},
+      title : document.getElementById("day").value + " ~ Hourly Averages", 
+        legend: {position: 'bottom'},	
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	   //draw the chart in the approporate div element
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+    chart.draw(DATA, options2);
+		  	  
+        }
+    );
+}  
+		
+        
+    // Function to display the prediction (bike occupancy based on weather) using app route to access the data
+		function prediction() {
+    
+    var jqxhr = $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
+        
+       console.log(daily);
+        document.getElementById("pred").innerHTML = "Predicted # of bikes <br> at this station in 3h: "+daily;
+            }
+    );
+        
+    }
+		
+    </script>
+</html>
