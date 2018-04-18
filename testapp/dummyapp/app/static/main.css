@@ -36,6 +36,19 @@ header {
     top: 0%;
     z-index: 3;
 }
+
+#legend {
+    position: absolute;
+    left: 35%;
+    z-index: 5;
+    color: #e6e6e6;
+}
+
+.legendIcons {
+    display: inline-block;
+    width: 2.5%;
+    z-index: 10;
+}
 #overlay {
     position: absolute;
     left: 30%;
@@ -112,17 +125,19 @@ select {
     width: 100%;
     
 }
+
 #chart_div {
     position: absolute;
     top: 48.5%;
-    left: 21%;
+    left: 15%;
 }
 
 #chart_div2 {
     position: absolute; 
     top: 48.5%;
-    left: 55%;
+    left: 51.5%;
 }
+
 #pageTitle {
     position: absolute;
     top: 1%;
@@ -194,9 +209,10 @@ select {
     }
 
 #test {
-    top: 50%;
-    left: 5%;       
-    position: absolute;   
+    top: 60%;
+    left: 1%;       
+    position: absolute;  
+    box-shadow: 5px 5px 10px #A9A9A9;
 }
 
 .sidenav {
@@ -272,8 +288,8 @@ select {
 }
 
 #pred {
-    top: 66.5%;
-    left: 8%;       
+    top: 77%;
+    left: 4%;       
     position: absolute;
     text-align: center; 
     font-size: 0.8vw;
