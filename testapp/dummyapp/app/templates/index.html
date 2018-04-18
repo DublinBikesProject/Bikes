@@ -347,120 +347,127 @@
           
       //google.charts.setOnLoadCallback(drawVisualization);
 
-        // Function to create the daily graph using app route to create a URL to access the data, which is called onclick
-        function drawVisualization() {
-            //The path is populated by the select which is the station
+                
+ // Function to create the daily graph using app route to create a URL to access the data, which is called onclick
+function drawVisualization() {
+    
+         //The path is populated by the select which is the station
         //This generates the flask query and creates the URL that holds the data
-            
-            //clearing the divs during an onchange from the select which generates the info for a new station. 
-            
-            //clears the div containing the second graph
+    
     document.getElementById('chart_div2').innerHTML = "";
-            
-    //clears the welcome to Dublin Bikes information HUb.
     document.getElementById("textBox").innerHTML = "";
-            
-            
-            
-            $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
+    //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data
+   var jqxhr =  $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
         
-            console.log(daily);
+        console.log(daily);
  
-                //to access the data need to delve one level deeper by access the name of the array created in the flask query.
-                var DATA = google.visualization.arrayToDataTable([
-                    ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
-                    ['Monday', daily.data[2].ab, daily.data[2].ast, daily.data[9].r],
-                    ['Tuesday', daily.data[6].ab, daily.data[6].ast, daily.data[13].r],
-                    ['Wednesday', daily.data[7].ab, daily.data[7].ast, daily.data[14].r],
-                    ['Thursday', daily.data[5].ab, daily.data[5].ast, daily.data[12].r],
-                    ['Friday', daily.data[1].ab, daily.data[1].ast, daily.data[8].r],
-                    ['Saturday', daily.data[3].ab, daily.data[3].ast, daily.data[10].r],
-                    ['Sunday', daily.data[4].ab, daily.data[4].ast, daily.data[11].r],
-                ]);
-
-                // Display and styling of the daily graph
-                var options = {
-                    width: 575,
-                    height: 345,
-                    colors: ['#008080', '#707ac2', "#7ac270"],
-                    backgroundColor: '#e6e6e6',
-                    chartArea: {'width': '73%'},
-                title : document.getElementById("Input").value, 
-                legend: {position: 'bottom'},
-                vAxis: {title: 'Daily Avg Station Data '},	
-                seriesType: 'bars',
-                series: {2: {type: 'line'}}
-                };
+            //to access the data need to delve one level deeper by access the name of the array created in the flask query.
+            var DATA = google.visualization.arrayToDataTable([
+                ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
+                ['Monday', Math.round(daily.data[2].ab), Math.round(daily.data[2].ast), Math.round(daily.data[9].r)],
+                ['Tuesday', Math.round(daily.data[6].ab), Math.round(daily.data[6].ast), Math.round(daily.data[13].r)],
+                ['Wednesday', Math.round(daily.data[7].ab), Math.round(daily.data[7].ast), Math.round(daily.data[14].r)],
+                ['Thursday', Math.round(daily.data[5].ab), Math.round(daily.data[5].ast), Math.round(daily.data[12].r)],
+                ['Friday', Math.round(daily.data[1].ab), Math.round(daily.data[1].ast), Math.round(daily.data[8].r)],
+                ['Saturday', Math.round(daily.data[3].ab), Math.round(daily.data[3].ast), Math.round(daily.data[10].r)],
+                ['Sunday', Math.round(daily.data[4].ab), Math.round(daily.data[4].ast), Math.round(daily.data[11].r)],
+            ]);
+ 
+       
+    // Display and styling of the daily graph
+   var options = {
+                width: 575,
+                height: 345,
+                colors: ['#008080', '#707ac2', "#7ac270"],
+                backgroundColor: '#e6e6e6',
+                chartArea: {'width': '73%'},
+      title : document.getElementById("Input").value, 
+        legend: {position: 'in'},
+	  vAxis: {title: 'Daily Avg Station Data '},	
+      hAxis: {title: 'Day'},
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
 	  
-           // Display the graph on the webpage 
+        // Display the graph on the webpage 
             var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
-            chart.draw(DATA, options);
+    chart.draw(DATA, options);
 		 
-        }
+    }
         
         );
 }
-    // Function to create the hourly graph
-    function drawVisualisation2() {
+
+// Function to create the hourly graph
+ function drawVisualisation2(x) {
     
-    // The path is populated by the select which is the station
-    // This generates the flask query and creates the URL that holds the data
-        
-    // Function to create the hourly graph using app route to create a URL to access the data, which is called onclick
-    $.getJSON( "/daily/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
+           //The path is populated by the select which is the station
+    //This generates the flask query and creates the URL that holds the data  
+     
+     // Function to create the hourly graph using app route to create a URL to access the data, which is called onclick
+    
+    var jqxhr = $.getJSON( "/hourly/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
         
         console.log(daily);          
 
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
-                ['06:00', daily.Hourly[6].ab, daily.Hourly[6].ast, daily.Hourly[24].r],
-                ['07:00', daily.Hourly[7].ab, daily.Hourly[7].ast, daily.Hourly[25].r],
-                ['08:00', daily.Hourly[8].ab, daily.Hourly[8].ast, daily.Hourly[26].r],
-                ['09:00', daily.Hourly[9].ab, daily.Hourly[9].ast, daily.Hourly[27].r],
-                ['10:00', daily.Hourly[10].ab, daily.Hourly[10].ast, daily.Hourly[28].r],
-                ['11:00', daily.Hourly[11].ab, daily.Hourly[11].ast, daily.Hourly[29].r],
-                ['12:00', daily.Hourly[12].ab, daily.Hourly[12].ast, daily.Hourly[30].r],
-                ['13:00', daily.Hourly[13].ab, daily.Hourly[13].ast, daily.Hourly[31].r],
-                ['14:00', daily.Hourly[14].ab, daily.Hourly[14].ast, daily.Hourly[32].r],
-                ['15:00', daily.Hourly[15].ab, daily.Hourly[15].ast, daily.Hourly[33].r],
-                ['16:00', daily.Hourly[16].ab, daily.Hourly[16].ast, daily.Hourly[34].r],
-                ['17:00', daily.Hourly[17].ab, daily.Hourly[17].ast, daily.Hourly[35].r],
-                ['18:00', daily.Hourly[18].ab, daily.Hourly[18].ast, daily.Hourly[36].r],
-                ['19:00', daily.Hourly[19].ab, daily.Hourly[19].ast, daily.Hourly[37].r],
-                ['20:00', daily.Hourly[20].ab, daily.Hourly[20].ast, daily.Hourly[38].r],
-                ['21:00', daily.Hourly[21].ab, daily.Hourly[21].ast, daily.Hourly[39].r],
-                ['22:00', daily.Hourly[22].ab, daily.Hourly[22].ast, daily.Hourly[40].r],
-                ['23:00', daily.Hourly[23].ab, daily.Hourly[23].ast, daily.Hourly[41].r], 
+                ['06:00', Math.round(daily.Hourly[6].ab), Math.round(daily.Hourly[6].ast), Math.round(daily.Hourly[24].r)],
+                ['07:00', Math.round(daily.Hourly[7].ab), Math.round(daily.Hourly[7].ast), Math.round(daily.Hourly[25].r)],
+                ['08:00', Math.round(daily.Hourly[8].ab), Math.round(daily.Hourly[8].ast), Math.round(daily.Hourly[26].r)],
+                ['09:00', Math.round(daily.Hourly[9].ab), Math.round(daily.Hourly[9].ast), Math.round(daily.Hourly[27].r)],
+                ['10:00', Math.round(daily.Hourly[10].ab), Math.round(daily.Hourly[10].ast), Math.round(daily.Hourly[28].r)],
+                ['11:00', Math.round(daily.Hourly[11].ab), Math.round(daily.Hourly[11].ast), Math.round(daily.Hourly[29].r)],
+                ['12:00', Math.round(daily.Hourly[12].ab), Math.round(daily.Hourly[12].ast), Math.round(daily.Hourly[30].r)],
+                ['13:00', Math.round(daily.Hourly[13].ab), Math.round(daily.Hourly[13].ast), Math.round(daily.Hourly[31].r)],
+                ['14:00', Math.round(daily.Hourly[14].ab), Math.round(daily.Hourly[14].ast), Math.round(daily.Hourly[32].r)],
+                ['15:00', Math.round(daily.Hourly[15].ab), Math.round(daily.Hourly[15].ast), Math.round(daily.Hourly[33].r)],
+                ['16:00', Math.round(daily.Hourly[16].ab), Math.round(daily.Hourly[16].ast), Math.round(daily.Hourly[34].r)],
+                ['17:00', Math.round(daily.Hourly[17].ab), Math.round(daily.Hourly[17].ast), Math.round(daily.Hourly[35].r)],
+                ['18:00', Math.round(daily.Hourly[18].ab), Math.round(daily.Hourly[18].ast), Math.round(daily.Hourly[36].r)],
+                ['19:00', Math.round(daily.Hourly[19].ab), Math.round(daily.Hourly[19].ast), Math.round(daily.Hourly[37].r)],
+                ['20:00', Math.round(daily.Hourly[20].ab), Math.round(daily.Hourly[20].ast), Math.round(daily.Hourly[38].r)],
+                ['21:00', Math.round(daily.Hourly[21].ab), Math.round(daily.Hourly[21].ast), Math.round(daily.Hourly[39].r)],
+                ['22:00', Math.round(daily.Hourly[22].ab), Math.round(daily.Hourly[22].ast), Math.round(daily.Hourly[40].r)],
+                ['23:00', Math.round(daily.Hourly[23].ab), Math.round(daily.Hourly[23].ast), Math.round(daily.Hourly[41].r)], 
             ]);
+ 
         
        // Display and styling of the daily graph
-       var options2 = {
-                    width: 720,
-                    height: 345,
-                    colors: ['#008080', '#707ac2', "#7ac270", "#7ac270"],
-                    backgroundColor: '#e6e6e6',
-                    chartArea: {'width': '73%'},
-          title : document.getElementById("day").value, 
-            legend: {position: 'bottom'},
-          vAxis: {title: 'Hourly Avg Station Data '},	
-          seriesType: 'bars',
-          series: {2: {type: 'line'}}
-        };
-           // Draw the chart in the approporate div element
-           var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
-           chart.draw(DATA, options2);
-
-            }
-        );
-    }  
-		// Function to display the prediction (bike occupancy based on weather) using app route to access the data
-		function prediction() {
-            $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
-                console.log(daily);
-                document.getElementById("pred").innerHTML = "Predicted No. of Bikes <br> at this Station in 3h: " + daily;
-            }
-          );  
+   var options2 = {
+                width: 720,
+                height: 345,
+                colors: ['#008080', '#707ac2', "#7ac270", "#7ac270"],
+                backgroundColor: '#e6e6e6',
+                chartArea: {'width': '73%'},
+      title : document.getElementById("day").value, 
+        legend: {position: 'in'},
+	  vAxis: {title: 'Hourly Avg Station Data '},	
+      hAxis: {title: 'Time'},
+      seriesType: 'bars',
+      series: {2: {type: 'line'}}
+    };
+	   //draw the chart in the approporate div element
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+    chart.draw(DATA, options2);
+		  	  
         }
+    );
+}  
+		
+        
+    // Function to display the prediction (bike occupancy based on weather) using app route to access the data
+		function prediction() {
+    
+    var jqxhr = $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
+        
+       console.log(daily);
+        document.getElementById("pred").innerHTML = "Predicted # of bikes <br> at this station in 3h: "+daily;
+            }
+    );
+        
+    }
 		
     </script>
 </html>

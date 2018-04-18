@@ -63,7 +63,7 @@ def predict_bikes(station):
     return str(rfc.predict(X))
 
 
-@app.route('/daily/<name>/<day>')
+@app.route('/hourly/<name>/<day>')
 def get_hourly(name, day):
     engine = db_connect()
     connect = engine.connect()

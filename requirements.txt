@@ -1,7 +1,48 @@
-# Add your pinned requirements so that they can be easily installed with:
-# pip install -r requirements.txt
-# Remember to also add them in setup.cfg but unpinned.
-# Example:
-# numpy==1.13.3
-# scipy==1.0
-
+app==0.0.1
+arrow==0.12.1
+attrs==17.4.0
+beautifulsoup4==4.6.0
+binaryornot==0.4.4
+bs4==0.0.1
+certifi==2018.1.18
+chardet==3.0.4
+click==6.7
+cookiecutter==1.6.0
+Flask==0.12.2
+-e git+https://github.com/rochacbruno/Flask-GoogleMaps@a517fd7fc54f9438df524b80436697bef20a80d5#egg=Flask_GoogleMaps
+future==0.16.0
+idna==2.6
+itsdangerous==0.24
+Jinja2==2.10
+jinja2-time==0.2.0
+jsonify==0.5
+MarkupSafe==1.0
+numpy==1.14.1
+pandas==0.22.0
+pip==10.0.0
+pluggy==0.6.0
+poyo==0.4.1
+py==1.5.2
+PyMySQL==0.6.2
+PyScaffold==3.0.1
+pytest==3.4.0
+python-dateutil==2.6.1
+pytz==2018.3
+requests==2.18.4
+scikit-learn==0.19.1
+scipy==1.0.1
+SE-assignment3==0.0.post0.dev12+g50b1cae.dirty
+setuptools==38.4.0
+simplejson==3.13.2
+six==1.11.0
+sklearn==0.0
+-e git+https://github.com/MaryKateTyrrell/SE_assignment3.git@df268fd9cda1bc6468e29f4be6cc87e187bd32d5#egg=Solve_led&subdirectory=src
+SolveLed==0.1
+SQLAlchemy==1.2.5
+sysInfo==0.1
+SYSINFOTEST==0.1
+-e git+https://github.com/MaryKateTyrrell/eclipse-SoftwareEngineering.git@033f34e3f9e93a29410d8668b0ddb40d45177a01#egg=systemInfo&subdirectory=systemInfo
+urllib3==1.22
+Werkzeug==0.14.1
+wheel==0.30.0
+whichcraft==0.4.1
