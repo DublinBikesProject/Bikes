@@ -350,7 +350,18 @@
         // Function to create the daily graph using app route to create a URL to access the data, which is called onclick
         function drawVisualization() {
             //The path is populated by the select which is the station
-            //This generates the flask query and creates the URL that holds the data
+        //This generates the flask query and creates the URL that holds the data
+            
+            //clearing the divs during an onchange from the select which generates the info for a new station. 
+            
+            //clears the div containing the second graph
+    document.getElementById('chart_div2').innerHTML = "";
+            
+    //clears the welcome to Dublin Bikes information HUb.
+    document.getElementById("textBox").innerHTML = "";
+            
+            
+            
             $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
         
             console.log(daily);
@@ -390,7 +401,7 @@
         );
 }
     // Function to create the hourly graph
-    function drawVisualisation2(x) {
+    function drawVisualisation2() {
     
     // The path is populated by the select which is the station
     // This generates the flask query and creates the URL that holds the data

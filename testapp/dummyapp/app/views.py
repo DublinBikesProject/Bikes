@@ -22,9 +22,13 @@ def predict_bikes(station):
     for i in rows:
         rain_forecast.update(dict(i))
     
-
     path = './app/stations/'
-    os.makedirs(path, exist_ok=True)     #create directory when non-existing
+    os.makedirs(path, exist_ok=True) #create directory when non-existing
+    
+    if station == "Princes Street / O'Connell Street": # to handle the slash in the station name
+        station = "Princes Street O'Connell Street"
+        
+        
     address = station+'.pkl'
     day = dt.datetime.today().weekday() # current day of the week 0=Monday
     hour = (dt.datetime.now().hour) +3 # current hour + 3
