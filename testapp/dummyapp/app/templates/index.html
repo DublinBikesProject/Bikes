@@ -37,17 +37,17 @@
 	  <div style="display:none; width:100%; height:100%;" id="myDiv" class="animate-bottom">
           <img src="../static/dublinbike.png" id="logo">
              <div id="sidebar" class="sidenav">
-  <!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()"></a>-->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                  
                  
   <a href="https://www.facebook.com/dublinbikes/"><img src=../static/facebook.png class="links"></a>
   <a href="https://twitter.com/hashtag/dublinbikes?lang=en"><img src="../static/twitter.png" class="links"></a>
-  <a href="http://www.dublinbikes.ie/"><img src="../static/home.png" class='links'></a>
+  <a href="http://www.dublinbikes.ie/"><img src="../static/burger_menu.png" id="burger"><img src="../static/home.png" class='links'></a>
                  
                  
 </div>
           
-          <span style="font-size:30px;cursor:pointer" onclick="openNav()" onclick="closeNav()"><img src="../static/burger_menu.png" id="burger"></span>
+          <span style="font-size:30px;cursor:pointer;" onclick="openNav()" id='menuBtn'><img src="../static/burger_menu.png" id="burger"></span>
 
       <header>
     
@@ -81,18 +81,11 @@
         <div id="dropdown">
             <select  id="Input" onchange="myFunction();drawVisualization();prediction()"></select>
         </div> 
-        <div id='box'>
-			
-            <!--<div id=weatherButton> 
-                <div id='weather'></div>
-                
-            </div>-->
-        </div>
     </div>
     <div id='textBox'>Welcome to Dublin Bikes<br>Information Hub</div>
 	<div id="chart_div"></div>
 	 <div id="chart_div2"></div>
-		  <div id="pred">pred</div>
+		  <div id="pred"></div>
 	 </div>
       <!--<footer>Ciara | Mariyana | Mary-Kate |2018 </footer>-->
       
@@ -182,8 +175,8 @@ function closeNav() {
         var humidity = weatherData[0].humidity;
         var minTemp = weatherData[0].temp_min;
         var maxTemp = weatherData[0].temp_max;
-        var windspeed = weatherData[0].windspeed; 
-
+        var windspeed = weatherData[0].windspeed;
+        var future = weatherData[0].future_icon;
 		var weatherWidget = "<div id='weatherWidget'>";
 		weatherWidget += "<span id='temperature'>" + Math.round(temp) + "°</span>" + "<img src=../static/" + icon + ".png id='icons'/>";
 		document.getElementById('weather').innerHTML = weatherWidget;
@@ -193,7 +186,7 @@ function closeNav() {
         function displayWeather() {
                     if (extra.style.display === "none") {
                         extra.style.display = "block";
-                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + minTemp + "°C, <br>Maximum Temperature: " + maxTemp + "°C, <br>Windspeed" + windspeed;
+                        extra.innerHTML = "Pressure: " + pressure + "<br>Humidity: " + humidity + "<br>Minimum Temperature: " + Math.round(minTemp) + "°C <br>Maximum Temperature: " + Math.round(maxTemp) + "°C <br>Windspeed:    " + windspeed + "<br><br><span id='prediction'>In 3 Hours:<br>   " + "<img src=../static/" + future + ".png id='futureIcon'/>";
                 } else {
                     extra.style.display = "none";
                 }
@@ -201,20 +194,6 @@ function closeNav() {
             
         }
 
-		    // from https://stackoverflow.com/questions/28415178/how-do-you-show-the-current-time-on-a-web-page
-
-		//(function() {
-		  //  var clockElement = document.getElementById("clock");
-
-//		    function updateClock(clock) {
-//		        clock.innerHTML = new Date().toLocaleTimeString();
-//		    }
-
-//		    setInterval(function() {
-//		        updateClock(clockElement);
-//		    }, 1000);
-
-//		}());
 
 		function initMap() {
 		    directionsService = new google.maps.DirectionsService();
@@ -468,7 +447,7 @@ function drawVisualization() {
     $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
         
        console.log(daily);
-        document.getElementById("pred").innerHTML = "Predicted # of bikes <br> at this station in 3h: "+daily;
+        document.getElementById("pred").innerHTML = "Predicted No. of Bikes <br> at this Station in 3h: " + daily;
             }
     );
         
