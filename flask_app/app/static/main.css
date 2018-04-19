@@ -39,9 +39,10 @@ header {
 
 #legend {
     position: absolute;
-    left: 35%;
+    left: 30%;
     z-index: 5;
     color: #e6e6e6;
+    width: 70%;
 }
 
 .legendIcons {

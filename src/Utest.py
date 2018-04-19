@@ -49,6 +49,19 @@ class TestSetAdt(unittest.TestCase):
         for i in rows:
             weather_id.append(dict(i))
         self.assertTrue(weather_id==[{'id': "IE"}])
+
+    def test_query3(self):
+        # testing query returns correct output and DB connection
+        stations = []
+        engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
+        connection = engine.connect()
+        trans = connection.begin()
+        rows = connection.execute("Select distinct(lat),lng from bikes where address = 'George''s Lane'") # Query only works if the apostrophe is doubled up. 
+        trans.commit()
+        for i in rows:
+            stations.append(dict(i))
+        print(stations)
+        self.assertTrue(stations==[{'lat': 53.3502, 'lng': -6.279696}])
         
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestSetAdt)
