@@ -49,8 +49,22 @@ class TestSetAdt(unittest.TestCase):
         for i in rows:
             weather_id.append(dict(i))
         self.assertTrue(weather_id==[{'id': "IE"}])
-
+        
+        
     def test_query3(self):
+        # testing query for station names with special characters - apostrophe;'s
+        stations = []
+        engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
+        connection = engine.connect()
+        trans = connection.begin()
+        rows = connection.execute("Select distinct(lat),lng from bikes where address = 'Georges's Lane'") 
+        trans.commit()
+        for i in rows:
+            stations.append(dict(i))
+        self.assertTrue(stations==[{'lat': 53.3502, 'lng': -6.279696}])
+        
+        # solution
+    def test_query4(self):
         # testing query for station names with special characters - apostrophe;'s
         stations = []
         engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
@@ -61,6 +75,32 @@ class TestSetAdt(unittest.TestCase):
         for i in rows:
             stations.append(dict(i))
         self.assertTrue(stations==[{'lat': 53.3502, 'lng': -6.279696}])
+        
+         
+    def test_query5(self):
+        # testing query for station names with special characters - forward slash
+        stations = []
+        engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
+        connection = engine.connect()
+        trans = connection.begin()
+        rows = connection.execute("Select distinct(lat),lng from bikes where address = 'Princes Street / O'Connell Street'")
+        trans.commit()
+        for i in rows:
+            stations.append(dict(i))
+        self.assertTrue(stations==[{'lat': 53.349, 'lng': -6.260311}])
+        
+    #solution    
+    def test_query6(self):
+        # testing query for station names with special characters - forward slash
+        stations = []
+        engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
+        connection = engine.connect()
+        trans = connection.begin()
+        rows = connection.execute("Select distinct(lat),lng from bikes where address = 'Princes Street \/ O''Connell Street'")  # Both the slash and the apostrophe need to be escaped for this to work
+        trans.commit()
+        for i in rows:
+            stations.append(dict(i))
+        self.assertTrue(stations==[{'lat': 53.349, 'lng': -6.260311}])
         
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestSetAdt)
