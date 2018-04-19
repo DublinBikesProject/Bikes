@@ -51,7 +51,7 @@ class TestSetAdt(unittest.TestCase):
         self.assertTrue(weather_id==[{'id': "IE"}])
 
     def test_query3(self):
-        # testing query returns correct output and DB connection
+        # testing query for station names with special characters - apostrophe;'s
         stations = []
         engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
         connection = engine.connect()
@@ -60,7 +60,6 @@ class TestSetAdt(unittest.TestCase):
         trans.commit()
         for i in rows:
             stations.append(dict(i))
-        print(stations)
         self.assertTrue(stations==[{'lat': 53.3502, 'lng': -6.279696}])
         
 if __name__ == "__main__":
