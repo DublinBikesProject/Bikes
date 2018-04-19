@@ -11,6 +11,9 @@ import datetime
 import sys
 
 def dbConnect():
+    
+    """Function to connect to the database"""
+    
     try:
         db = pymysql.connect(
             host='52.43.48.163',
@@ -24,6 +27,8 @@ def dbConnect():
     return db
     
 def insertDb(data, db):
+    
+    """Function to insert the data into the database"""
     
     try:
         cursor = db.cursor()
@@ -40,7 +45,9 @@ def insertDb(data, db):
         message = template.format(type(e).__name__, e.args)
         print(message)
 
-def main(): 
+def main():
+
+    """Function to connect to the API and call the above functions to run the scraper"""
 
     url = "http://api.openweathermap.org/data/2.5/forecast?q=dublin,ie&units=metric&appid=a87a4c45fc8819c6fd6dae5a0db2439a"
     db = dbConnect()

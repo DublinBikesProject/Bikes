@@ -7,10 +7,8 @@ from time import sleep, strftime, gmtime
 from bs4 import BeautifulSoup
 import pymysql.cursors
 import datetime
-
-   
-def dbconnect():
     
+def dbconnect():
     """ Function to establish connection to the database """
     
     try:
@@ -26,7 +24,6 @@ def dbconnect():
     return db
 
 def insertDb(data, db):
-    
     """ Function to write to the database """
 
     try:
@@ -44,9 +41,6 @@ def insertDb(data, db):
         print(message)
 
 def main():
-    
-    """ Connects to the API and calls the above functions"""
-    
     url = 'https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=163a27dc14a77d825fb26c4212d74477642b4469' # the website containing the data
     db = dbconnect() # invoke the connect function AKA create the connection to the database
     print("Connected")

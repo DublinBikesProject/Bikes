@@ -10,9 +10,13 @@ from app import app
 import os
 import numpy as np
 
+
 @app.route('/predict/<station>')
 def predict_bikes(station):
-
+    
+    """Function creates a pickle file based on the station name
+    Uses object from the pickle file to generate the prediction"""
+    
     rain_forecast = {"x":"y"}
     engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
     connection = engine.connect()
@@ -63,8 +67,12 @@ def predict_bikes(station):
     return str(rfc.predict(X))
 
 
+
 @app.route('/hourly/<path:name>/<day>')
 def get_hourly(name, day):
+
+    """Function to pull average hourly data from the database based on the station name and the day selected"""
+    
     print(name)
     name = name.replace("'","''")
     engine = db_connect()
@@ -78,8 +86,12 @@ def get_hourly(name, day):
         Hourly.append(dict(row))
     return jsonify(Hourly=Hourly)
 
+ 
 @app.route('/daily/<path:name>')
 def get_daily(name):
+    
+    """Function to pull average daily data from the database based on the station name selected"""
+    
     print(name)
     name = name.replace("'","''")
     engine = db_connect()
@@ -93,23 +105,21 @@ def get_daily(name):
         data.append(dict(row))
     return jsonify(data=data)
 
-@app.route("/locs")
-def get_locs():
-    #print("1")
-    engine = db_connect()
-    connect = engine.connect()
-    locs = []
-    rows = connect.execute("SELECT address,lat,lng FROM bikes;")
-    for row in rows:
-        locs.append(dict(row))
-    return jsonify(locs=locs)
 
 def db_connect():
+
+    """Function to pull average daily data from the database based on the station name selected"""
+    
     engine = create_engine("mysql+pymysql://publicdb:sqlpublic@52.43.48.163:3306/sqlpublic",echo=False)
     return engine
 
 @app.route('/')
 def index():
+    
+    """Function to pull the information about the stations
+
+    This info is used to dispay markers on the map and station info on click"""
+    
     engine = db_connect()
     connect = engine.connect()
     points = []
@@ -117,7 +127,8 @@ def index():
     for row in rows:
         points.append(dict(row))
     jsonify(points=points)
-    
+
+    """ Extracts weather data from the database"""
     weather = []
     info = connect.execute("SELECT * FROM weather")
     for i in info:
