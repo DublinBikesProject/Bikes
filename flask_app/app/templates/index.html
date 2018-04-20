@@ -192,7 +192,12 @@
                 } 
         }
 
-        // Function to display a Google map on the webpafe 
+            // Function to initialise map function on EC2
+		$(document).ready(function) {
+			initMap()
+		});
+
+	    // Function to display a Google map on the webpage 
 		function initMap() {
 		    directionsService = new google.maps.DirectionsService();
 		    directionsDisplay = new google.maps.DirectionsRenderer();
