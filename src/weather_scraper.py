@@ -63,12 +63,12 @@ def main():
             print(id)
 
 
-
+            # solution to missing rain data provided by Aonghus Lawlor
             data_list = data['list'][2]
             threeH_rain_predict = 0 # default is 0
 
             if 'rain' in data_list:                 # check for a rain prediction
-                if '3h' in data_list['rain']: # check for a 3h rain prediction
+                if '3h' in data_list['rain']:   # check for a 3h rain prediction
                     threeH_rain_predict =  data_list['rain']['3h']
 
 
@@ -82,7 +82,6 @@ def main():
             temp_min = data['list'][0]['main']['temp_min']
             temp_max = data['list'][0]['main']['temp_max']
             windspeed = data['list'][0]['wind']['speed']
-            #threeH_rain_predict = data['list'][2]['rain']['3h']
             future_icon = data['list'][1]['weather'][0]['icon']
             
             data = [id, main, desc, temp, icon, pressure, humidity, temp_min, temp_max, windspeed, threeH_rain_predict, future_icon]

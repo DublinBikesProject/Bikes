@@ -12,6 +12,11 @@ Deliverables
 
 The link to the repository is as follows: https://github.com/DublinBikesProject/Bikes.git
 
+This project is hosted on http://ec2-52-42-23-219.us-west-2.compute.amazonaws.com:5000/
+
+To run this project from the command line, navigate into the app folder (Bikes/flask_app) and run the command
+command python run.py, and the website will display at http://0.0.0.0:5000/
+
 
 ========
 Overview

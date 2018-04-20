@@ -193,7 +193,7 @@
         }
 
             // Function to initialise map function on EC2
-		$(document).ready(function) {
+		$(document).ready(function() {
 			initMap()
 		});
 
@@ -323,7 +323,7 @@
 		                        slng = y[k].lng;
 		                    }
 		                }
-		                console.log(marker.position.lat() + " " + marker.position.lng());
+		                //console.log(marker.position.lat() + " " + marker.position.lng());
 
 		                for (var i = 0; i < markers.length; i++) {
 		                    var a = marker.position.lng();
@@ -365,7 +365,7 @@ function drawVisualization() {
     //This generates the flask query and creates the URL that holds the data
    var jqxhr =  $.getJSON( '/daily/'+document.getElementById("Input").value, function( daily ) {
         
-        console.log(daily);
+        //console.log(daily);
  
             //to access the data need to delve one level deeper by access the name of the array created in the flask query.
             var DATA = google.visualization.arrayToDataTable([
@@ -412,7 +412,7 @@ function drawVisualization() {
     
     var jqxhr = $.getJSON( "/hourly/"+document.getElementById("Input").value+'/'+document.getElementById("day").value, function( daily ) {
         
-        console.log(daily);          
+        //console.log(daily);          
 
             var DATA = google.visualization.arrayToDataTable([
                 ['Time of Day (Hourly)', 'Available Bikes', 'Available Bike Stands', 'mm rain'],
@@ -462,7 +462,7 @@ function drawVisualization() {
     
     var jqxhr = $.getJSON('/predict/'+document.getElementById("Input").value, function( daily ) {
         
-       console.log(daily);
+       //console.log(daily);
         document.getElementById("pred").innerHTML = "Predicted # of bikes <br> at this station in 3h: "+daily;
             }
     );
