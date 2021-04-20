@@ -22,7 +22,7 @@ pandas==0.22.0
 pip==10.0.0
 pluggy==0.6.0
 poyo==0.4.1
-py==1.5.2
+py==1.10.0
 PyMySQL==0.6.2
 PyScaffold==3.0.1
 pytest==3.4.0
