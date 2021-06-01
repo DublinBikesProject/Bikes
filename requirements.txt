@@ -42,7 +42,7 @@ SQLAlchemy==1.2.5
 sysInfo==0.1
 SYSINFOTEST==0.1
 -e git+https://github.com/MaryKateTyrrell/eclipse-SoftwareEngineering.git@033f34e3f9e93a29410d8668b0ddb40d45177a01#egg=systemInfo&subdirectory=systemInfo
-urllib3==1.22
+urllib3==1.26.5
 Werkzeug==0.14.1
 wheel==0.30.0
 whichcraft==0.4.1
