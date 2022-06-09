@@ -7,7 +7,7 @@ bs4==0.0.1
 certifi==2018.1.18
 chardet==3.0.4
 click==6.7
-cookiecutter==1.6.0
+cookiecutter==2.1.1
 Flask==0.12.2
 -e git+https://github.com/rochacbruno/Flask-GoogleMaps@a517fd7fc54f9438df524b80436697bef20a80d5#egg=Flask_GoogleMaps
 future==0.16.0
