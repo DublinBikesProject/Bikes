@@ -44,5 +44,5 @@ SYSINFOTEST==0.1
 -e git+https://github.com/MaryKateTyrrell/eclipse-SoftwareEngineering.git@033f34e3f9e93a29410d8668b0ddb40d45177a01#egg=systemInfo&subdirectory=systemInfo
 urllib3==1.22
 Werkzeug==0.14.1
-wheel==0.30.0
+wheel==0.38.1
 whichcraft==0.4.1
