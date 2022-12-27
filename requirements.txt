@@ -32,7 +32,7 @@ requests==2.18.4
 scikit-learn==0.19.1
 scipy==1.0.1
 SE-assignment3==0.0.post0.dev12+g50b1cae.dirty
-setuptools==38.4.0
+setuptools==65.5.1
 simplejson==3.13.2
 six==1.11.0
 sklearn==0.0
